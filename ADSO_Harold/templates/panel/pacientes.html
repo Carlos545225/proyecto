@@ -1,0 +1,302 @@
+{% extends 'panel/base_panel.html' %}
+{% block content %}
+<main class="container-fluid mt-4 flex-grow-1">
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-4">
+        <h1 class="h3 fw-bold text-secondary">Gestión de Pacientes</h1>
+        <div class="btn-toolbar mb-2 mb-md-0">
+            <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#nuevoPacienteModal">
+                <i class="fas fa-user-plus me-1"></i> Nuevo Paciente
+            </button>
+            <button type="button" class="btn btn-sm btn-outline-secondary ms-2">
+                <i class="fas fa-file-export me-1"></i> Exportar
+            </button>
+        </div>
+    </div>
+
+    <!-- Filtros de búsqueda -->
+    <div class="card shadow-sm border-0 mb-4">
+        <div class="card-body">
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <div class="input-group">
+                        <span class="input-group-text bg-light"><i class="fas fa-search"></i></span>
+                        <input type="text" class="form-control" placeholder="Buscar paciente...">
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <button type="button" class="btn btn-primary w-100">Filtrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tabla de pacientes -->
+    <div class="card shadow-sm border-0">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th scope="col">#ID</th>
+                            <th scope="col">Nombres</th>
+                            <th scope="col">Apellidos</th>
+                            <th scope="col">Tipo de Documento</th>
+                            <th scope="col">N° Documento</th>
+                            <th scope="col">Telefono</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>P001</td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <img src="{{ url_for('static', filename='img/panel/perfil.png')}}" class="rounded-circle me-2" width="40" height="40" alt="Foto">
+                                    <div>
+                                        <div class="fw-medium">Elena Maria</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>Rojas Mercado</td>
+                            <td>Cedula de Ciudadania</td>
+                            <td>1102148630</td>
+                            <td>3244016591</td>
+                            <td>maria@gmail.com</td>
+                            <td>
+                                <div class="btn-group btn-group-sm">
+                                    <button type="button" class="btn btn-primary me-1" title="Ver detalles">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-warning me-1" title="Editar" data-bs-toggle="modal" data-bs-target="#editarPacienteModal">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-danger" title="Eliminar">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Paginación -->
+            <nav aria-label="Paginación de pacientes">
+                <ul class="pagination justify-content-center mt-4">
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Anterior</a>
+                    </li>
+                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                    <li class="page-item">
+                        <a class="page-link" href="#">Siguiente</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</main>
+
+<!-- Modal para Nuevo Paciente -->
+<div class="modal fade" id="nuevoPacienteModal" tabindex="-1" aria-labelledby="nuevoPacienteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="nuevoPacienteModalLabel">Registrar Nuevo Paciente</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="nombrePaciente" class="form-label">Nombres</label>
+                            <input type="text" class="form-control" id="nombrePaciente" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="apellidosPaciente" class="form-label">Apellidos</label>
+                            <input type="text" class="form-control" id="apellidosPaciente" required>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="tipoDocumento" class="form-label">Tipo de Documento</label>
+                            <select class="form-select" id="tipoDocumento" required>
+                                <option value="" selected disabled>Seleccionar</option>
+                                <option value="CC">Cédula de Ciudadanía</option>
+                                <option value="CE">Cédula de Extranjería</option>
+                                <option value="TI">Tarjeta de Identidad</option>
+                                <option value="PA">Pasaporte</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="numeroDocumento" class="form-label">Número de Documento</label>
+                            <input type="text" class="form-control" id="numeroDocumento" required>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label for="fechaNacimiento" class="form-label">Fecha de Nacimiento</label>
+                            <input type="date" class="form-control" id="fechaNacimiento" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="telefonoPaciente" class="form-label">Teléfono</label>
+                            <input type="tel" class="form-control" id="telefonoPaciente" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="emailPaciente" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="emailPaciente" required>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="direccionPaciente" class="form-label">Dirección</label>
+                            <input type="text" class="form-control" id="direccionPaciente" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="ciudadPaciente" class="form-label">Ciudad</label>
+                            <input type="text" class="form-control" id="ciudadPaciente" required>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label for="estadoCivil" class="form-label">Estado Civil</label>
+                            <select class="form-select" id="estadoCivil">
+                                <option value="" selected disabled>Seleccionar</option>
+                                <option value="soltero">Soltero/a</option>
+                                <option value="casado">Casado/a</option>
+                                <option value="divorciado">Divorciado/a</option>
+                                <option value="viudo">Viudo/a</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="ocupacion" class="form-label">Ocupación</label>
+                            <input type="text" class="form-control" id="ocupacion">
+                        </div>
+                        <div class="col-md-4">
+                            <label for="eps" class="form-label">EPS</label>
+                            <input type="text" class="form-control" id="eps" required>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="contactoEmergencia" class="form-label">Contacto de Emergencia</label>
+                            <input type="text" class="form-control" id="contactoEmergencia" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="telefonoEmergencia" class="form-label">Teléfono de Emergencia</label>
+                            <input type="tel" class="form-control" id="telefonoEmergencia" required>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary">Guardar paciente</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para Editar Paciente -->
+<div class="modal fade" id="editarPacienteModal" tabindex="-1" aria-labelledby="editarPacienteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editarPacienteModalLabel">Editar Paciente</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="editNombrePaciente" class="form-label">Nombres</label>
+                            <input type="text" class="form-control" id="editNombrePaciente" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="editApellidosPaciente" class="form-label">Apellidos</label>
+                            <input type="text" class="form-control" id="editApellidosPaciente" required>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="editTipoDocumento" class="form-label">Tipo de Documento</label>
+                            <select class="form-select" id="editTipoDocumento" required>
+                                <option value="" disabled>Seleccionar</option>
+                                <option value="CC">Cédula de Ciudadanía</option>
+                                <option value="CE">Cédula de Extranjería</option>
+                                <option value="TI">Tarjeta de Identidad</option>
+                                <option value="PA">Pasaporte</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="editNumeroDocumento" class="form-label">Número de Documento</label>
+                            <input type="text" class="form-control" id="editNumeroDocumento" required>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label for="editFechaNacimiento" class="form-label">Fecha de Nacimiento</label>
+                            <input type="date" class="form-control" id="editFechaNacimiento" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="editTelefonoPaciente" class="form-label">Teléfono</label>
+                            <input type="tel" class="form-control" id="editTelefonoPaciente" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="editEmailPaciente" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="editEmailPaciente" required>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="editDireccionPaciente" class="form-label">Dirección</label>
+                            <input type="text" class="form-control" id="editDireccionPaciente" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="editCiudadPaciente" class="form-label">Ciudad</label>
+                            <input type="text" class="form-control" id="editCiudadPaciente" required>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label for="editEstadoCivil" class="form-label">Estado Civil</label>
+                            <select class="form-select" id="editEstadoCivil">
+                                <option value="" disabled>Seleccionar</option>
+                                <option value="soltero">Soltero/a</option>
+                                <option value="casado">Casado/a</option>
+                                <option value="divorciado">Divorciado/a</option>
+                                <option value="viudo">Viudo/a</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="editOcupacion" class="form-label">Ocupación</label>
+                            <input type="text" class="form-control" id="editOcupacion">
+                        </div>
+                        <div class="col-md-4">
+                            <label for="editEps" class="form-label">EPS</label>
+                            <input type="text" class="form-control" id="editEps" required>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="editContactoEmergencia" class="form-label">Contacto de Emergencia</label>
+                            <input type="text" class="form-control" id="editContactoEmergencia" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="editTelefonoEmergencia" class="form-label">Teléfono de Emergencia</label>
+                            <input type="tel" class="form-control" id="editTelefonoEmergencia" required>
+                        </div>
+                    </div>
+                    <input type="hidden" id="editPacienteId">
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary">Guardar cambios</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
