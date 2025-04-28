@@ -1,0 +1,251 @@
+{% extends 'panel/base_panel.html' %}
+{% block content %}
+<main class="container-fluid mt-4 flex-grow-1">
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-4">
+        <h1 class="h3 fw-bold text-secondary">Gestión de Historias Clínicas</h1>
+        <div class="btn-toolbar mb-2 mb-md-0">
+            <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#nuevaHistoriaModal">
+                <i class="fas fa-notes-medical me-1"></i> Nueva Historia
+            </button>
+            <button type="button" class="btn btn-sm btn-outline-secondary ms-2">
+                <i class="fas fa-file-export me-1"></i> Exportar
+            </button>
+        </div>
+    </div>
+
+    <!-- Filtros de búsqueda -->
+    <div class="card shadow-sm border-0 mb-4">
+        <div class="card-body">
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <div class="input-group">
+                        <span class="input-group-text bg-light"><i class="fas fa-search"></i></span>
+                        <input type="text" class="form-control" placeholder="Buscar paciente...">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <select class="form-select">
+                        <option selected>Todos los diagnósticos</option>
+                        <option>Hipertensión</option>
+                        <option>Diabetes</option>
+                        <option>Asma</option>
+                        <option>Artritis</option>
+                        <option>Migraña</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <button type="button" class="btn btn-primary w-100">Filtrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tabla de historias clínicas -->
+    <div class="card shadow-sm border-0">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th scope="col">#HC</th>
+                            <th scope="col">Paciente</th>
+                            <th scope="col">Documento</th>
+                            <th scope="col">Fecha Creación</th>
+                            <th scope="col">Última Consulta</th>
+                            <th scope="col">Médico Tratante</th>
+                            <th scope="col">Diagnóstico</th>
+                            <th scope="col">Estado</th>
+                            <th scope="col">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>HC001</td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <img src="{{ url_for('static', filename='img/panel/perfil.png')}}" class="rounded-circle me-2" width="40" height="40" alt="Foto">
+                                    <div>
+                                        <div class="fw-medium">Carlos Eduardo Correa</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>1102148630</td>
+                            <td>15/03/2023</td>
+                            <td>10/04/2024</td>
+                            <td>Dr. Juan Pérez</td>
+                            <td>Hipertensión Arterial</td>
+                            <td><span class="badge bg-success">Activo</span></td>
+                            <td>
+                                <div class="btn-group btn-group-sm">
+                                    <button type="button" class="btn btn-primary me-1" title="Ver detalles">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-warning me-1" title="Editar" data-bs-toggle="modal" data-bs-target="#editarHistoriaModal">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-danger" title="Eliminar">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Paginación -->
+            <nav aria-label="Paginación de historias clínicas">
+                <ul class="pagination justify-content-center mt-4">
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Anterior</a>
+                    </li>
+                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                    <li class="page-item">
+                        <a class="page-link" href="#">Siguiente</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</main>
+
+<!-- Modal para Nueva Historia Clínica -->
+<div class="modal fade" id="nuevaHistoriaModal" tabindex="-1" aria-labelledby="nuevaHistoriaModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="nuevaHistoriaModalLabel">Registrar Nueva Historia Clínica</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="pacienteHistoria" class="form-label">Paciente</label>
+                            <select class="form-select" id="pacienteHistoria" required>
+                                <option value="" selected disabled>Seleccionar paciente</option>
+                                <option value="1">Carlos Eduardo Correa (CC: 1102148630)</option>
+                                <option value="2">María José Rodríguez (CC: 1102148632)</option>
+                                <option value="3">Juan David Pérez (CC: 1102148631)</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="medicoHistoria" class="form-label">Médico Tratante</label>
+                            <select class="form-select" id="medicoHistoria" required>
+                                <option value="" selected disabled>Seleccionar médico</option>
+                                <option value="1">Dr. Juan Pérez (Medicina General)</option>
+                                <option value="2">Dra. Ana Gómez (Cardiología)</option>
+                                <option value="3">Dr. Carlos López (Pediatría)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="fechaCreacion" class="form-label">Fecha de Creación</label>
+                            <input type="date" class="form-control" id="fechaCreacion" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="motivoConsulta" class="form-label">Motivo de Consulta</label>
+                            <input type="text" class="form-control" id="motivoConsulta" required>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-12">
+                            <label for="antecedentesMedicos" class="form-label">Antecedentes Médicos</label>
+                            <textarea class="form-control" id="antecedentesMedicos" rows="3"></textarea>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-12">
+                            <label for="diagnosticoInicial" class="form-label">Diagnóstico Inicial</label>
+                            <textarea class="form-control" id="diagnosticoInicial" rows="3" required></textarea>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-12">
+                            <label for="tratamientoIndicado" class="form-label">Tratamiento Indicado</label>
+                            <textarea class="form-control" id="tratamientoIndicado" rows="3" required></textarea>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary">Guardar Historia</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para Editar Historia Clínica -->
+<div class="modal fade" id="editarHistoriaModal" tabindex="-1" aria-labelledby="editarHistoriaModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editarHistoriaModalLabel">Editar Historia Clínica</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="editPacienteHistoria" class="form-label">Paciente</label>
+                            <input type="text" class="form-control" id="editPacienteHistoria" readonly>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="editMedicoHistoria" class="form-label">Médico Tratante</label>
+                            <select class="form-select" id="editMedicoHistoria" required>
+                                <option value="" disabled>Seleccionar médico</option>
+                                <option value="1">Dr. Juan Pérez (Medicina General)</option>
+                                <option value="2">Dra. Ana Gómez (Cardiología)</option>
+                                <option value="3">Dr. Carlos López (Pediatría)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="editFechaCreacion" class="form-label">Fecha de Creación</label>
+                            <input type="date" class="form-control" id="editFechaCreacion" readonly>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="editFechaActualizacion" class="form-label">Fecha de Actualización</label>
+                            <input type="date" class="form-control" id="editFechaActualizacion" required>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-12">
+                            <label for="editAntecedentesMedicos" class="form-label">Antecedentes Médicos</label>
+                            <textarea class="form-control" id="editAntecedentesMedicos" rows="3"></textarea>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-12">
+                            <label for="editDiagnosticoActual" class="form-label">Diagnóstico Actual</label>
+                            <textarea class="form-control" id="editDiagnosticoActual" rows="3" required></textarea>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-12">
+                            <label for="editTratamientoActual" class="form-label">Tratamiento Actual</label>
+                            <textarea class="form-control" id="editTratamientoActual" rows="3" required></textarea>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-12">
+                            <label for="editObservaciones" class="form-label">Observaciones</label>
+                            <textarea class="form-control" id="editObservaciones" rows="3"></textarea>
+                        </div>
+                    </div>
+                    <input type="hidden" id="editHistoriaId">
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary">Guardar cambios</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

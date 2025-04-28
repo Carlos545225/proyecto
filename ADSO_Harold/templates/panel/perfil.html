@@ -1,0 +1,75 @@
+{% extends 'panel/base_panel.html' %}
+{% block content %}
+<main class="container-fluid mt-4 flex-grow-1">
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-4">
+        <h1 class="h3 fw-bold text-secondary">Mi Cuenta</h1>
+        <div class="btn-toolbar mb-2 mb-md-0">
+            <a href="panel.html" class="btn btn-sm btn-primary">
+                <i class="fas fa-arrow-left me-1"></i> Volver al Panel
+            </a>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-lg-4">
+            <div class="card shadow-sm border-0 mb-4">
+                <div class="card-body text-center">
+                    <div class="position-relative d-inline-block mb-3">
+                        <img src="perfil.png" alt="Foto de Perfil" class="rounded-circle img-thumbnail" style="width: 150px; height: 150px; object-fit: cover;">
+                        <a href="cambiar-foto.html" class="btn btn-sm btn-primary rounded-circle position-absolute bottom-0 end-0" 
+                                title="Cambiar foto de perfil">
+                            <i class="fas fa-camera"></i>
+                        </a>
+                    </div>
+                    <h5 class="fw-bold mb-1">Dr. Carlos López</h5>
+                    <p class="text-muted mb-3">Médico General</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-8">
+            <div class="card shadow-sm border-0">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <div>
+                        <i class="fas fa-user-edit me-2"></i> Información Personal
+                    </div>
+                    <button type="button" class="btn btn-sm btn-outline-primary" id="btnEditar">
+                        <i class="fas fa-pencil-alt me-1"></i> Editar
+                    </button>
+                </div>
+                <div class="card-body">
+                    <form action="#" method="post">
+                        <div class="row mb-3">
+                            <div class="col-md-12">
+                                <label for="nombreCompleto" class="form-label">Nombre Completo</label>
+                                <input type="text" class="form-control" id="nombreCompleto" name="nombreCompleto" value="Carlos López" readonly>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-12">
+                                <label for="email" class="form-label">Correo Electrónico</label>
+                                <input type="email" class="form-control" id="email" name="email" value="carlos.lopez@medipanel.com" readonly>
+                            </div>
+                        </div>
+                        <div class="row mb-3 d-none" id="passwordFields">
+                            <div class="col-md-6">
+                                <label for="password" class="form-label">Contraseña</label>
+                                <input type="password" class="form-control" id="password" name="password" placeholder="Introduce nueva contraseña">
+                                <div class="form-text">Dejar en blanco para mantener la contraseña actual</div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="passwordConfirm" class="form-label">Confirmar Contraseña</label>
+                                <input type="password" class="form-control" id="passwordConfirm" name="passwordConfirm" placeholder="Confirma nueva contraseña">
+                            </div>
+                        </div>
+                        <div class="text-end">
+                            <button type="submit" class="btn btn-primary d-none" id="btnGuardar">Guardar Cambios</button>
+                            <button type="button" class="btn btn-secondary d-none" id="btnCancelar">Cancelar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}
