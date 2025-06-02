@@ -1,0 +1,340 @@
+<!-- Contenido Principal del CRUD de Usuarios -->
+<div class="container-fluid dashboard-container px-4 py-4">
+
+    <!-- Nav Tabs estilo Carpeta -->
+    <ul class="nav nav-tabs nav-tabs-custom" id="userTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="administradores-tab" data-bs-toggle="tab" data-bs-target="#administradores-tab-pane" type="button" role="tab" aria-controls="administradores-tab-pane" aria-selected="true">
+                <i class="bi bi-shield-lock-fill me-2"></i>Administradores
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="bibliotecarios-tab" data-bs-toggle="tab" data-bs-target="#bibliotecarios-tab-pane" type="button" role="tab" aria-controls="bibliotecarios-tab-pane" aria-selected="false">
+                <i class="bi bi-person-workspace me-2"></i>Bibliotecarios
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="lectores-tab" data-bs-toggle="tab" data-bs-target="#lectores-tab-pane" type="button" role="tab" aria-controls="lectores-tab-pane" aria-selected="false">
+                <i class="bi bi-people-fill me-2"></i>Lectores
+            </button>
+        </li>
+    </ul>
+
+    <!-- Contenido de los Tabs -->
+    <div class="tab-content" id="userTabsContent">
+        <!-- Pestaña Administradores -->
+        <div class="tab-pane fade show active p-3 bg-white border border-top-0 rounded-bottom shadow-sm" id="administradores-tab-pane" role="tabpanel" aria-labelledby="administradores-tab" tabindex="0">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h3 class="text-verde-oscuro mb-0">Gestión de Administradores</h3>
+                <button class="btn btn-leaf"><i class="bi bi-plus-circle-fill me-2"></i>Añadir Nuevo Administrador</button>
+            </div>
+            <!-- Buscador personalizado para Administradores -->
+            <div class="card mb-3 border-0 shadow-sm bg-light-custom">
+                <div class="card-body p-3">
+                    <div class="row g-2">
+                        <div class="col-md-8">
+                            <div class="input-group search-custom">
+                                <span class="input-group-text bg-white border-end-0"><i class="bi bi-search text-verde-medio"></i></span>
+                                <input type="text" id="buscar-administradores" class="form-control border-start-0 ps-0" placeholder="Buscar por nombre, email, usuario...">
+                                <button class="btn btn-verde-medio text-white" type="button">Buscar</button>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <select class="form-select select-custom border" id="filtro-estado-admin">
+                                <option value="">Todos los estados</option>
+                                <option value="activo">Activo</option>
+                                <option value="inactivo">Inactivo</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="table-responsive table-container-custom">
+                <table class="table table-custom">
+                    <thead>
+                        <tr>
+                            <th class="th-custom">ID</th>
+                            <th class="th-custom">Nombre</th>
+                            <th class="th-custom">Apellido</th>
+                            <th class="th-custom">Email</th>
+                            <th class="th-custom">Usuario</th>
+                            <th class="th-custom">Estado</th>
+                            <th class="th-custom">Fecha Registro</th>
+                            <th class="th-custom text-center">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>Carlos</td>
+                            <td>Rodríguez</td>
+                            <td>carlos@biblioteca.com</td>
+                            <td>admin_carlos</td>
+                            <td><span class="badge badge-custom badge-success">Activo</span></td>
+                            <td>01/01/2024</td>
+                            <td>
+                                <button class="btn btn-sm btn-outline-primary me-1" title="Editar"><i class="bi bi-pencil-square"></i></button>
+                                <button class="btn btn-sm btn-outline-danger" title="Eliminar"><i class="bi bi-trash3-fill"></i></button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>María</td>
+                            <td>González</td>
+                            <td>maria@biblioteca.com</td>
+                            <td>admin_maria</td>
+                            <td><span class="badge badge-custom badge-success">Activo</span></td>
+                            <td>15/02/2024</td>
+                            <td>
+                                <button class="btn btn-sm btn-outline-primary me-1" title="Editar"><i class="bi bi-pencil-square"></i></button>
+                                <button class="btn btn-sm btn-outline-danger" title="Eliminar"><i class="bi bi-trash3-fill"></i></button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <!-- Paginación personalizada para Administradores -->
+                <div class="pagination-container">
+                    <div class="pagination-info">
+                        Mostrando <span class="fw-bold">1-2</span> de <span class="fw-bold">2</span> administradores
+                    </div>
+                    <nav aria-label="Paginación de administradores">
+                        <ul class="pagination pagination-custom">
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#" aria-label="Anterior">
+                                    <span aria-hidden="true"><i class="bi bi-chevron-left"></i></span>
+                                </a>
+                            </li>
+                            <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#" aria-label="Siguiente">
+                                    <span aria-hidden="true"><i class="bi bi-chevron-right"></i></span>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pestaña Bibliotecarios -->
+        <div class="tab-pane fade p-3 bg-white border border-top-0 rounded-bottom shadow-sm" id="bibliotecarios-tab-pane" role="tabpanel" aria-labelledby="bibliotecarios-tab" tabindex="0">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h3 class="text-verde-oscuro mb-0">Gestión de Bibliotecarios</h3>
+                <button class="btn btn-leaf"><i class="bi bi-plus-circle-fill me-2"></i>Añadir Nuevo Bibliotecario</button>
+            </div>
+            <!-- Buscador personalizado para Bibliotecarios -->
+            <div class="card mb-3 border-0 shadow-sm bg-light-custom">
+                <div class="card-body p-3">
+                    <div class="row g-2">
+                        <div class="col-md-8">
+                            <div class="input-group search-custom">
+                                <span class="input-group-text bg-white border-end-0"><i class="bi bi-search text-verde-medio"></i></span>
+                                <input type="text" id="buscar-bibliotecarios" class="form-control border-start-0 ps-0" placeholder="Buscar por nombre, email, usuario...">
+                                <button class="btn btn-verde-medio text-white" type="button">Buscar</button>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <select class="form-select select-custom border" id="filtro-turno-biblio">
+                                <option value="">Todos los turnos</option>
+                                <option value="mañana">Mañana</option>
+                                <option value="tarde">Tarde</option>
+                                <option value="noche">Noche</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="table-responsive table-container-custom">
+                <table class="table table-custom">
+                    <thead>
+                        <tr>
+                            <th class="th-custom">ID</th>
+                            <th class="th-custom">Nombre</th>
+                            <th class="th-custom">Apellido</th>
+                            <th class="th-custom">Email</th>
+                            <th class="th-custom">Usuario</th>
+                            <th class="th-custom">Turno</th>
+                            <th class="th-custom">Estado</th>
+                            <th class="th-custom">Fecha Registro</th>
+                            <th class="th-custom text-center">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>Ana</td>
+                            <td>Martínez</td>
+                            <td>ana@biblioteca.com</td>
+                            <td>biblio_ana</td>
+                            <td>Mañana</td>
+                            <td><span class="badge badge-custom badge-success">Activo</span></td>
+                            <td>10/01/2024</td>
+                            <td>
+                                <button class="btn btn-sm btn-outline-primary me-1" title="Editar"><i class="bi bi-pencil-square"></i></button>
+                                <button class="btn btn-sm btn-outline-danger" title="Eliminar"><i class="bi bi-trash3-fill"></i></button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>Pedro</td>
+                            <td>López</td>
+                            <td>pedro@biblioteca.com</td>
+                            <td>biblio_pedro</td>
+                            <td>Tarde</td>
+                            <td><span class="badge badge-custom badge-success">Activo</span></td>
+                            <td>20/02/2024</td>
+                            <td>
+                                <button class="btn btn-sm btn-outline-primary me-1" title="Editar"><i class="bi bi-pencil-square"></i></button>
+                                <button class="btn btn-sm btn-outline-danger" title="Eliminar"><i class="bi bi-trash3-fill"></i></button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <!-- Paginación personalizada para Bibliotecarios -->
+                <div class="pagination-container">
+                    <div class="pagination-info">
+                        Mostrando <span class="fw-bold">1-2</span> de <span class="fw-bold">2</span> bibliotecarios
+                    </div>
+                    <nav aria-label="Paginación de bibliotecarios">
+                        <ul class="pagination pagination-custom">
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#" aria-label="Anterior">
+                                    <span aria-hidden="true"><i class="bi bi-chevron-left"></i></span>
+                                </a>
+                            </li>
+                            <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#" aria-label="Siguiente">
+                                    <span aria-hidden="true"><i class="bi bi-chevron-right"></i></span>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pestaña Lectores -->
+        <div class="tab-pane fade p-3 bg-white border border-top-0 rounded-bottom shadow-sm" id="lectores-tab-pane" role="tabpanel" aria-labelledby="lectores-tab" tabindex="0">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h3 class="text-verde-oscuro mb-0">Gestión de Lectores</h3>
+                <button class="btn btn-leaf"><i class="bi bi-plus-circle-fill me-2"></i>Añadir Nuevo Lector</button>
+            </div>
+            <!-- Buscador personalizado para Lectores -->
+            <div class="card mb-3 border-0 shadow-sm bg-light-custom">
+                <div class="card-body p-3">
+                    <div class="row g-2">
+                        <div class="col-md-6">
+                            <div class="input-group search-custom">
+                                <span class="input-group-text bg-white border-end-0"><i class="bi bi-search text-verde-medio"></i></span>
+                                <input type="text" id="buscar-lectores" class="form-control border-start-0 ps-0" placeholder="Buscar por nombre, email, dirección...">
+                                <button class="btn btn-verde-medio text-white" type="button">Buscar</button>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <select class="form-select select-custom border" id="filtro-estado-lector">
+                                <option value="">Todos los estados</option>
+                                <option value="activo">Activo</option>
+                                <option value="pendiente">Pendiente</option>
+                                <option value="inactivo">Inactivo</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <select class="form-select select-custom border" id="filtro-membresia">
+                                <option value="">Todas las membresías</option>
+                                <option value="premium">Premium</option>
+                                <option value="basica">Básica</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="table-responsive table-container-custom">
+                <table class="table table-custom">
+                    <thead>
+                        <tr>
+                            <th class="th-custom">ID</th>
+                            <th class="th-custom">Nombre</th>
+                            <th class="th-custom">Apellido</th>
+                            <th class="th-custom">Email</th>
+                            <th class="th-custom">Teléfono</th>
+                            <th class="th-custom">Dirección</th>
+                            <th class="th-custom">Membresía</th>
+                            <th class="th-custom">Estado</th>
+                            <th class="th-custom text-center">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>Laura</td>
+                            <td>Sánchez</td>
+                            <td>laura@gmail.com</td>
+                            <td>555-123-4567</td>
+                            <td>Calle Principal 123</td>
+                            <td>Premium</td>
+                            <td><span class="badge badge-custom badge-success">Activo</span></td>
+                            <td>
+                                <button class="btn-action btn-edit" title="Editar"><i class="bi bi-pencil-square"></i></button>
+                                <button class="btn-action btn-delete" title="Eliminar"><i class="bi bi-trash3-fill"></i></button>
+                                <button class="btn-action btn-info" title="Ver Préstamos"><i class="bi bi-book"></i></button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>Miguel</td>
+                            <td>Torres</td>
+                            <td>miguel@gmail.com</td>
+                            <td>555-987-6543</td>
+                            <td>Avenida Central 456</td>
+                            <td>Básica</td>
+                            <td><span class="badge badge-custom badge-success">Activo</span></td>
+                            <td>
+                                <button class="btn-action btn-edit" title="Editar"><i class="bi bi-pencil-square"></i></button>
+                                <button class="btn-action btn-delete" title="Eliminar"><i class="bi bi-trash3-fill"></i></button>
+                                <button class="btn-action btn-info" title="Ver Préstamos"><i class="bi bi-book"></i></button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>Sofía</td>
+                            <td>Ramírez</td>
+                            <td>sofia@gmail.com</td>
+                            <td>555-456-7890</td>
+                            <td>Calle Secundaria 789</td>
+                            <td>Premium</td>
+                            <td><span class="badge badge-custom badge-warning">Pendiente</span></td>
+                            <td>
+                                <button class="btn-action btn-edit" title="Editar"><i class="bi bi-pencil-square"></i></button>
+                                <button class="btn-action btn-delete" title="Eliminar"><i class="bi bi-trash3-fill"></i></button>
+                                <button class="btn-action btn-info" title="Ver Préstamos"><i class="bi bi-book"></i></button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <!-- Paginación personalizada para Lectores -->
+                <div class="pagination-container">
+                    <div class="pagination-info">
+                        Mostrando <span class="fw-bold">1-3</span> de <span class="fw-bold">3</span> lectores
+                    </div>
+                    <nav aria-label="Paginación de lectores">
+                        <ul class="pagination pagination-custom">
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#" aria-label="Anterior">
+                                    <span aria-hidden="true"><i class="bi bi-chevron-left"></i></span>
+                                </a>
+                            </li>
+                            <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#" aria-label="Siguiente">
+                                    <span aria-hidden="true"><i class="bi bi-chevron-right"></i></span>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /Contenido de los Tabs -->
+</div>

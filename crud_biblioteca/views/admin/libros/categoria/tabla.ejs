@@ -1,0 +1,126 @@
+<!-- Tabla de Categorías -->
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h3 class="text-verde-oscuro mb-0">Gestión de Categorías</h3>
+    <div>
+        <a href="/admin/libros/categoria/agregar" class="btn btn-leaf"><i class="bi bi-tag-fill me-2"></i>Añadir Nueva Categoría</a>
+        <a href="/admin/libros/categoria/historial" class="btn btn-outline-secondary ms-2"><i class="bi bi-clock-history me-2"></i>Historial</a>
+    </div>
+</div>
+
+<!-- Buscador personalizado para Categorías -->
+<div class="card mb-3 border-0 shadow-sm bg-light-custom">
+    <div class="card-body p-3">
+        <form action="/admin/libros" method="GET" class="row g-2">
+            <input type="hidden" name="tab" value="categorias">
+            <div class="col-md-12">
+                <div class="input-group search-custom">
+                    <span class="input-group-text bg-white border-end-0"><i class="bi bi-search text-verde-medio"></i></span>
+                    <input type="text" 
+                           name="busqueda" 
+                           class="form-control border-start-0 ps-0" 
+                           placeholder="Buscar por nombre o descripción..."
+                           value="<%= typeof filtros !== 'undefined' ? filtros.busqueda || '' : '' %>">
+                    <button class="btn btn-verde-medio text-white" type="submit">Buscar</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Tabla de Categorías -->
+<div class="table-responsive table-container-custom">
+    <table class="table table-custom">
+        <thead>
+            <tr>
+                <th class="th-custom col-id">ID</th>
+                <th class="th-custom">Nombre</th>
+                <th class="th-custom">Código</th>
+                <th class="th-custom">Descripción</th>
+                <th class="th-custom">Categoría Padre</th>
+                <th class="th-custom text-center col-acciones">Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% if (typeof categorias !== 'undefined' && categorias.length > 0) { %>
+                <% categorias.forEach(categoria => { %>
+                    <tr>
+                        <td><%= categoria.id %></td>
+                        <td class="text-truncate-tooltip" data-title="<%= categoria.nombre %>">
+                            <%= categoria.nombre %>
+                        </td>
+                        <td class="text-truncate-tooltip" data-title="<%= categoria.codigo || 'N/A' %>">
+                            <%= categoria.codigo || 'N/A' %>
+                        </td>
+                        <td class="text-truncate-tooltip" data-title="<%= categoria.descripcion %>">
+                            <%= categoria.descripcion %>
+                        </td>
+                        <td class="text-truncate-tooltip" data-title="<%= categoria.categoria_padre_nombre %>">
+                            <%= categoria.categoria_padre_nombre %>
+                        </td>
+                        <td class="text-center">
+                            <a href="/admin/libros/categoria/editar/<%= categoria.id %>" class="btn-action btn-edit" title="Editar">
+                                <i class="bi bi-pencil-square"></i>
+                            </a>
+                            <a href="/admin/libros/categoria/eliminar/<%= categoria.id %>" 
+                               class="btn-action btn-delete" 
+                               title="Enviar al Historial"
+                               onclick="return confirm('¿Está seguro de que desea enviar esta categoría al historial?')">
+                                <i class="bi bi-trash3-fill"></i>
+                            </a>
+                        </td>
+                    </tr>
+                <% }); %>
+            <% } else { %>
+                <tr>
+                    <td colspan="6" class="text-center py-4">
+                        <div class="alert alert-info mb-0">
+                            <i class="bi bi-info-circle me-2"></i>
+                            No se encontraron categorías
+                            <% if (typeof filtros !== 'undefined' && filtros.busqueda) { %>
+                                que coincidan con la búsqueda
+                            <% } %>
+                        </div>
+                    </td>
+                </tr>
+            <% } %>
+        </tbody>
+    </table>
+</div>
+
+<!-- Paginación -->
+<% if (typeof paginacion !== 'undefined' && paginacion.categorias) { %>
+    <div class="pagination-container">
+        <div class="pagination-info">
+            Mostrando <span class="fw-bold"><%= paginacion.categorias.inicio %>-<%= paginacion.categorias.fin %></span> 
+            de <span class="fw-bold"><%= paginacion.categorias.total %></span> categorías
+        </div>
+        <% if (paginacion.categorias.totalPaginas > 1) { %>
+            <nav aria-label="Paginación de categorías">
+                <ul class="pagination pagination-custom">
+                    <li class="page-item <%= paginacion.categorias.pagina === 1 ? 'disabled' : '' %>">
+                        <a class="page-link" 
+                           href="?tab=categorias&page=<%= paginacion.categorias.pagina - 1 %><%= typeof filtros !== 'undefined' ? (filtros.busqueda ? '&busqueda=' + filtros.busqueda : '') : '' %>" 
+                           aria-label="Anterior">
+                            <span aria-hidden="true"><i class="bi bi-chevron-left"></i></span>
+                        </a>
+                    </li>
+                    <% for(let i = 1; i <= paginacion.categorias.totalPaginas; i++) { %>
+                        <li class="page-item <%= i === paginacion.categorias.pagina ? 'active' : '' %>">
+                            <a class="page-link" 
+                               href="?tab=categorias&page=<%= i %><%= typeof filtros !== 'undefined' ? (filtros.busqueda ? '&busqueda=' + filtros.busqueda : '') : '' %>">
+                                <%= i %>
+                            </a>
+                        </li>
+                    <% } %>
+                    <li class="page-item <%= paginacion.categorias.pagina === paginacion.categorias.totalPaginas ? 'disabled' : '' %>">
+                        <a class="page-link" 
+                           href="?tab=categorias&page=<%= paginacion.categorias.pagina + 1 %><%= typeof filtros !== 'undefined' ? (filtros.busqueda ? '&busqueda=' + filtros.busqueda : '') : '' %>" 
+                           aria-label="Siguiente">
+                            <span aria-hidden="true"><i class="bi bi-chevron-right"></i></span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        <% } %>
+    </div>
+<% } %>

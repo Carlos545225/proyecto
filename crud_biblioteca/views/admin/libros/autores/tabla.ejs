@@ -1,0 +1,134 @@
+<!-- Tabla de Autores -->
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h3 class="text-verde-oscuro mb-0">Gestión de Autores</h3>
+    <div>
+        <a href="/admin/libros/autor/agregar" class="btn btn-leaf"><i class="bi bi-person-plus-fill me-2"></i>Añadir Nuevo Autor</a>
+        <a href="/admin/libros/autor/historial" class="btn btn-outline-secondary ms-2"><i class="bi bi-clock-history me-2"></i>Historial</a>
+    </div>
+</div>
+
+<!-- Buscador personalizado para Autores -->
+<div class="card mb-3 border-0 shadow-sm bg-light-custom">
+    <div class="card-body p-3">
+        <form action="/admin/libros" method="GET" class="row g-2">
+            <input type="hidden" name="tab" value="autores">
+            <div class="col-md-6">
+                <div class="input-group search-custom">
+                    <span class="input-group-text bg-white border-end-0"><i class="bi bi-search text-verde-medio"></i></span>
+                    <input type="text" 
+                           name="busqueda" 
+                           class="form-control border-start-0 ps-0" 
+                           placeholder="Buscar por nombre, nacionalidad..."
+                           value="<%= typeof filtros !== 'undefined' ? filtros.busqueda || '' : '' %>">
+                    <button class="btn btn-verde-medio text-white" type="submit">Buscar</button>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <select name="nacionalidad" class="form-select select-custom border" onchange="this.form.submit()">
+                    <option value="">Todas las nacionalidades</option>
+                    <% if (typeof nacionalidades !== 'undefined' && nacionalidades.length > 0) { %>
+                        <% nacionalidades.forEach(function(nac) { %>
+                            <option value="<%= nac.nacionalidad %>" 
+                                    <%= (typeof filtros !== 'undefined' && filtros.nacionalidad === nac.nacionalidad) ? 'selected' : '' %>>
+                                <%= nac.nacionalidad %>
+                            </option>
+                        <% }); %>
+                    <% } %>
+                </select>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="table-responsive table-container-custom">
+    <table class="table table-custom">
+        <thead>
+            <tr>
+                <th class="th-custom col-id">ID</th>
+                <th class="th-custom col-autor">Nombre Completo</th>
+                <th class="th-custom">Nacionalidad</th>
+                <th class="th-custom">Fecha Nacimiento</th>
+                <th class="th-custom">Fecha Fallecimiento</th>
+                <th class="th-custom">Biografía</th>
+                <th class="th-custom text-center col-acciones">Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% if (typeof autores !== 'undefined' && autores.length > 0) { %>
+                <% autores.forEach(function(autor) { %>
+                    <tr>
+                        <td><%= autor.id %></td>
+                        <td class="text-truncate-tooltip" data-title="<%= autor.nombre_completo %>">
+                            <%= autor.nombre_completo %>
+                        </td>
+                        <td class="text-truncate-tooltip" data-title="<%= autor.nacionalidad %>">
+                            <%= autor.nacionalidad %>
+                        </td>
+                        <td><%= new Date(autor.fecha_nacimiento).toLocaleDateString() %></td>
+                        <td>
+                            <%= autor.fecha_fallecimiento ? new Date(autor.fecha_fallecimiento).toLocaleDateString() : 'Vivo' %>
+                        </td>
+                        <td class="text-truncate-tooltip" data-title="<%= autor.biografia %>">
+                            <%= autor.biografia || 'No disponible' %>
+                        </td>
+                        <td class="text-center">
+                            <a href="/admin/libros/autor/editar/<%= autor.id %>" 
+                               class="btn-action btn-edit" 
+                               title="Editar">
+                                <i class="bi bi-pencil-square"></i>
+                            </a>
+                            <a href="/admin/libros/autor/eliminar/<%= autor.id %>" 
+                               class="btn-action btn-delete" 
+                               title="Eliminar"
+                               onclick="return confirm('¿Está seguro de que desea enviar este autor al historial?')">
+                                <i class="bi bi-trash3-fill"></i>
+                            </a>
+                        </td>
+                    </tr>
+                <% }); %>
+            <% } else { %>
+                <tr>
+                    <td colspan="7" class="text-center">No se encontraron autores</td>
+                </tr>
+            <% } %>
+        </tbody>
+    </table>
+
+    <!-- Paginación personalizada para Autores -->
+    <% if (typeof paginacion !== 'undefined') { %>
+        <div class="pagination-container">
+            <div class="pagination-info">
+                Mostrando <span class="fw-bold"><%= paginacion.autores.inicio %>-<%= paginacion.autores.fin %></span> 
+                de <span class="fw-bold"><%= paginacion.autores.total %></span> autores
+            </div>
+            <% if (paginacion.autores.totalPaginas > 1) { %>
+                <nav aria-label="Paginación de autores">
+                    <ul class="pagination pagination-custom">
+                        <li class="page-item <%= paginacion.autores.pagina === 1 ? 'disabled' : '' %>">
+                            <a class="page-link" 
+                               href="?tab=autores&page=<%= paginacion.autores.pagina - 1 %><%= typeof filtros !== 'undefined' ? (filtros.busqueda ? '&busqueda=' + filtros.busqueda : '') : '' %><%= typeof filtros !== 'undefined' ? (filtros.nacionalidad ? '&nacionalidad=' + filtros.nacionalidad : '') : '' %>" 
+                               aria-label="Anterior">
+                                <span aria-hidden="true"><i class="bi bi-chevron-left"></i></span>
+                            </a>
+                        </li>
+                        <% for(let i = 1; i <= paginacion.autores.totalPaginas; i++) { %>
+                            <li class="page-item <%= i === paginacion.autores.pagina ? 'active' : '' %>">
+                                <a class="page-link" 
+                                   href="?tab=autores&page=<%= i %><%= typeof filtros !== 'undefined' ? (filtros.busqueda ? '&busqueda=' + filtros.busqueda : '') : '' %><%= typeof filtros !== 'undefined' ? (filtros.nacionalidad ? '&nacionalidad=' + filtros.nacionalidad : '') : '' %>">
+                                    <%= i %>
+                                </a>
+                            </li>
+                        <% } %>
+                        <li class="page-item <%= paginacion.autores.pagina === paginacion.autores.totalPaginas ? 'disabled' : '' %>">
+                            <a class="page-link" 
+                               href="?tab=autores&page=<%= paginacion.autores.pagina + 1 %><%= typeof filtros !== 'undefined' ? (filtros.busqueda ? '&busqueda=' + filtros.busqueda : '') : '' %><%= typeof filtros !== 'undefined' ? (filtros.nacionalidad ? '&nacionalidad=' + filtros.nacionalidad : '') : '' %>" 
+                               aria-label="Siguiente">
+                                <span aria-hidden="true"><i class="bi bi-chevron-right"></i></span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            <% } %>
+        </div>
+    <% } %>
+</div>

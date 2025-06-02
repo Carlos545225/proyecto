@@ -1,0 +1,138 @@
+<!-- Contenido Principal -->
+<div class="container-fluid dashboard-container px-4 py-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+                    <h5 class="card-title text-verde-oscuro mb-0"><i class="bi bi-book-fill me-2"></i>Agregar Nuevo Libro</h5>
+                    <a href="/admin/libros?tab=libros" class="btn btn-outline-secondary btn-sm"><i class="bi bi-arrow-left me-1"></i>Volver</a>
+                </div>
+                <div class="card-body p-4">
+                    <form action="/admin/libros/libro/agregar" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="titulo" class="form-label">Título<span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="titulo" name="titulo" required>
+                                <div class="invalid-feedback">
+                                    Por favor ingrese el título del libro.
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="isbn" class="form-label">ISBN<span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="isbn" name="isbn" required>
+                                <div class="invalid-feedback">
+                                    Por favor ingrese el ISBN del libro.
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="autor_id" class="form-label">Autor<span class="text-danger">*</span></label>
+                                <select class="form-select" id="autor_id" name="autor_id" required>
+                                    <option value="" selected disabled>Seleccione un autor</option>
+                                    <% if (typeof autores !== 'undefined' && autores.length > 0) { %>
+                                        <% autores.forEach(autor => { %>
+                                            <option value="<%= autor.id %>"><%= autor.nombre_completo %></option>
+                                        <% }); %>
+                                    <% } %>
+                                </select>
+                                <div class="invalid-feedback">
+                                    Por favor seleccione un autor.
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="categoria_id" class="form-label">Categoría<span class="text-danger">*</span></label>
+                                <select class="form-select" id="categoria_id" name="categoria_id" required>
+                                    <option value="" selected disabled>Seleccione una categoría</option>
+                                    <% if (typeof categorias !== 'undefined' && categorias.length > 0) { %>
+                                        <% categorias.forEach(categoria => { %>
+                                            <option value="<%= categoria.id %>"><%= categoria.nombre %></option>
+                                        <% }); %>
+                                    <% } %>
+                                </select>
+                                <div class="invalid-feedback">
+                                    Por favor seleccione una categoría.
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="editorial_id" class="form-label">Editorial<span class="text-danger">*</span></label>
+                                <select class="form-select" id="editorial_id" name="editorial_id" required>
+                                    <option value="" selected disabled>Seleccione una editorial</option>
+                                    <% if (typeof editoriales !== 'undefined' && editoriales.length > 0) { %>
+                                        <% editoriales.forEach(editorial => { %>
+                                            <option value="<%= editorial.id %>"><%= editorial.nombre %></option>
+                                        <% }); %>
+                                    <% } %>
+                                </select>
+                                <div class="invalid-feedback">
+                                    Por favor seleccione una editorial.
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="anio_publicacion" class="form-label">Año de Publicación</label>
+                                <input type="number" class="form-control" id="anio_publicacion" name="anio_publicacion" min="1800" max="2024">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="idioma_id" class="form-label">Idioma<span class="text-danger">*</span></label>
+                                <select class="form-select" id="idioma_id" name="idioma_id" required>
+                                    <option value="" selected disabled>Seleccione un idioma</option>
+                                    <% if (typeof idiomas !== 'undefined' && idiomas.length > 0) { %>
+                                        <% idiomas.forEach(idioma => { %>
+                                            <option value="<%= idioma.id %>"><%= idioma.nombre %></option>
+                                        <% }); %>
+                                    <% } %>
+                                </select>
+                                <div class="invalid-feedback">
+                                    Por favor seleccione un idioma.
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="numero_paginas" class="form-label">Número de Páginas</label>
+                                <input type="number" class="form-control" id="numero_paginas" name="numero_paginas" min="1">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="stock" class="form-label">Stock<span class="text-danger">*</span></label>
+                                <input type="number" class="form-control" id="stock" name="stock" min="0" required>
+                                <div class="invalid-feedback">
+                                    Por favor ingrese el stock disponible.
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="portada" class="form-label">Portada</label>
+                                <input type="file" class="form-control" id="portada" name="portada" accept="image/*">
+                                <small class="text-muted">Formatos aceptados: JPG, PNG (máx. 2MB)</small>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="ubicacion" class="form-label">Ubicación en Biblioteca</label>
+                                <input type="text" class="form-control" id="ubicacion" name="ubicacion" placeholder="Ej: Estante A, Fila 3">
+                            </div>
+                            <div class="col-12">
+                                <label for="sinopsis" class="form-label">Sinopsis</label>
+                                <textarea class="form-control" id="sinopsis" name="sinopsis" rows="4"></textarea>
+                            </div>
+                            <div class="col-12 mt-4">
+                                <button type="submit" class="btn btn-leaf"><i class="bi bi-save me-2"></i>Guardar Libro</button>
+                                <a href="/admin/libros?tab=libros" class="btn btn-outline-secondary ms-2"><i class="bi bi-x-circle me-2"></i>Cancelar</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Validación del formulario
+    (function() {
+        'use strict';
+        var forms = document.querySelectorAll('.needs-validation');
+        Array.prototype.slice.call(forms).forEach(function(form) {
+            form.addEventListener('submit', function(event) {
+                if (!form.checkValidity()) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                form.classList.add('was-validated');
+            }, false);
+        });
+    })();
+</script>
