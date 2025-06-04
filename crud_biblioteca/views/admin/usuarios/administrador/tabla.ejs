@@ -1,0 +1,98 @@
+<!-- Buscador personalizado para Administradores -->
+<div class="card mb-3 border-0 shadow-sm bg-light-custom">
+    <div class="card-body p-3">
+        <form action="/admin/usuarios" method="GET" class="row g-2">
+            <div class="col-md-8">
+                <div class="input-group search-custom">
+                    <span class="input-group-text bg-white border-end-0"><i class="bi bi-search text-verde-medio"></i></span>
+                    <input type="text" name="busqueda" value="<%= busqueda %>" class="form-control border-start-0 ps-0" placeholder="Buscar por nombre, email, documento...">
+                    <button class="btn btn-verde-medio text-white" type="submit">Buscar</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Tabla de Administradores -->
+<div class="table-responsive table-container-custom">
+    <table class="table table-custom">
+        <thead>
+            <tr>
+                <th class="th-custom">ID</th>
+                <th class="th-custom">Nombre</th>
+                <th class="th-custom">Apellidos</th>
+                <th class="th-custom">Email</th>
+                <th class="th-custom">Documento</th>
+                <th class="th-custom">Estado</th>
+                <th class="th-custom">Fecha Registro</th>
+                <th class="th-custom text-center">Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% if (administradores && administradores.length > 0) { %>
+                <% administradores.forEach(admin => { %>
+                    <tr>
+                        <td><%= admin.id %></td>
+                        <td><%= admin.nombre %></td>
+                        <td><%= admin.apellidos %></td>
+                        <td><%= admin.email %></td>
+                        <td><%= admin.numero_documento %></td>
+                        <td>
+                            <span class="badge badge-custom <%= admin.estado ? 'badge-success' : 'badge-danger' %>">
+                                <%= admin.estado ? 'Activo' : 'Inactivo' %>
+                            </span>
+                        </td>
+                        <td><%= new Date(admin.fecha_registro).toLocaleDateString() %></td>
+                        <td>
+                            <a href="/admin/usuarios/administrador/ver/<%= admin.id %>" class="btn-action btn-info" title="Ver Detalles"><i class="bi bi-eye"></i></a>
+                            <a href="/admin/usuarios/administrador/editar/<%= admin.id %>" class="btn-action btn-edit" title="Editar"><i class="bi bi-pencil-square"></i></a>
+                            <a href="/admin/usuarios/administrador/eliminar/<%= admin.id %>" class="btn-action btn-delete" title="Eliminar" onclick="return confirm('¿Está seguro de eliminar este administrador?')"><i class="bi bi-trash3-fill"></i></a>
+                        </td>
+                    </tr>
+                <% }); %>
+            <% } else { %>
+                <tr>
+                    <td colspan="8" class="text-center">No se encontraron administradores</td>
+                </tr>
+            <% } %>
+        </tbody>
+    </table>
+    <!-- Paginación -->
+    <% if (typeof paginacion !== 'undefined') { %>
+        <div class="pagination-container">
+            <div class="pagination-info">
+                Mostrando <span class="fw-bold"><%= paginacion.inicio %>-<%= paginacion.fin %></span> 
+                de <span class="fw-bold"><%= paginacion.total %></span> administradores
+            </div>
+            <% if (paginacion.totalPaginas > 1) { %>
+                <nav aria-label="Paginación de administradores">
+                    <ul class="pagination pagination-custom">
+                        <li class="page-item <%= paginacion.pagina === 1 ? 'disabled' : '' %>">
+                            <a class="page-link" 
+                               href="?page=<%= paginacion.pagina - 1 %><%= busqueda ? '&busqueda=' + busqueda : '' %>" 
+                               aria-label="Anterior">
+                                <span aria-hidden="true"><i class="bi bi-chevron-left"></i></span>
+                            </a>
+                        </li>
+                        <% for(let i = 1; i <= paginacion.totalPaginas; i++) { %>
+                            <li class="page-item <%= i === paginacion.pagina ? 'active' : '' %>">
+                                <a class="page-link" 
+                                   href="?page=<%= i %><%= busqueda ? '&busqueda=' + busqueda : '' %>">
+                                    <%= i %>
+                                </a>
+                            </li>
+                        <% } %>
+                        <li class="page-item <%= paginacion.pagina === paginacion.totalPaginas ? 'disabled' : '' %>">
+                            <a class="page-link" 
+                               href="?page=<%= paginacion.pagina + 1 %><%= busqueda ? '&busqueda=' + busqueda : '' %>" 
+                               aria-label="Siguiente">
+                                <span aria-hidden="true"><i class="bi bi-chevron-right"></i></span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            <% } %>
+        </div>
+    <% } %>
+</div>
+

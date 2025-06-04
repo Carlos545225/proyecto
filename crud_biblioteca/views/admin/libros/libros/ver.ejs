@@ -1,0 +1,150 @@
+<!-- Contenido Principal -->
+<div class="container-fluid dashboard-container px-4 py-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+                    <h5 class="card-title text-verde-oscuro mb-0"><i class="bi bi-book-half me-2"></i>Detalles del Libro</h5>
+                    <div>
+                        <a href="/admin/libros/libro/editar/<%= libro.id %>" class="btn btn-verde btn-sm me-2"><i class="bi bi-pencil-square me-1"></i>Editar</a>
+                        <a href="/admin/libros?tab=libros" class="btn btn-outline-verde btn-sm"><i class="bi bi-arrow-left me-1"></i>Volver</a>
+                    </div>
+                </div>
+                <div class="card-body p-4">
+                    <div class="row">
+                        <!-- Columna de la portada -->
+                        <div class="col-md-3 mb-4 mb-md-0">
+                            <div class="text-center">
+                                <div class="book-cover-container mb-3">
+                                    <% if (libro.portada) { %>
+                                        <img src="/uploads/libros/<%= libro.portada %>" alt="Portada de <%= libro.titulo %>" class="img-fluid rounded shadow-sm" style="max-height: 300px;">
+                                    <% } else { %>
+                                        <img src="/img/portadas/default.jpg" alt="Portada no disponible" class="img-fluid rounded shadow-sm" style="max-height: 300px;">
+                                    <% } %>
+                                </div>
+                                <% if (libro.portada) { %>
+                                    <div class="d-grid gap-2">
+                                        <a href="/uploads/libros/<%= libro.portada %>" download class="btn btn-verde btn-sm"><i class="bi bi-download me-1"></i>Descargar Portada</a>
+                                    </div>
+                                <% } %>
+                            </div>
+                        </div>
+                        
+                        <!-- Columna de detalles -->
+                        <div class="col-md-9">
+                            <div class="row">
+                                <div class="col-12 mb-4">
+                                    <h4 class="text-verde-oscuro"><%= libro.titulo %></h4>
+                                    <div class="d-flex flex-wrap align-items-center mb-2">
+                                        <span class="badge bg-verde-medio me-2 mb-1"><%= libro.categoria_nombre %></span>
+                                        <span class="badge bg-verde-claro me-2 mb-1">Disponible</span>
+                                        <% if (libro.anio_publicacion) { %>
+                                            <span class="text-verde-medio small mb-1"><i class="bi bi-calendar3 me-1"></i><%= libro.anio_publicacion %></span>
+                                        <% } %>
+                                    </div>
+                                </div>
+                                
+                                <!-- Información básica -->
+                                <div class="col-md-6 mb-3">
+                                    <div class="detail-item">
+                                        <span class="detail-label">ISBN:</span>
+                                        <span class="detail-value text-verde-oscuro"><%= libro.isbn %></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <div class="detail-item">
+                                        <span class="detail-label">Autor:</span>
+                                        <span class="detail-value">
+                                            <a href="/admin/libros/autor/ver/<%= libro.autor_id %>" class="text-verde-medio text-decoration-none"><%= libro.autor_nombre %></a>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <div class="detail-item">
+                                        <span class="detail-label">Editorial:</span>
+                                        <span class="detail-value">
+                                            <a href="/admin/libros/editorial/ver/<%= libro.editorial_id %>" class="text-verde-medio text-decoration-none"><%= libro.editorial_nombre %></a>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <div class="detail-item">
+                                        <span class="detail-label">Idioma:</span>
+                                        <span class="detail-value text-verde-oscuro"><%= libro.idioma_nombre %></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <div class="detail-item">
+                                        <span class="detail-label">Número de Páginas:</span>
+                                        <span class="detail-value text-verde-oscuro"><%= libro.numero_paginas || 'No especificado' %></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <div class="detail-item">
+                                        <span class="detail-label">Stock Disponible:</span>
+                                        <span class="detail-value text-verde-oscuro fw-bold"><%= libro.stock %> unidades</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <div class="detail-item">
+                                        <span class="detail-label">Ubicación:</span>
+                                        <span class="detail-value text-verde-oscuro"><%= libro.ubicacion || 'No especificada' %></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <div class="detail-item">
+                                        <span class="detail-label">Fecha de Registro:</span>
+                                        <span class="detail-value text-verde-oscuro"><%= new Date(libro.fecha_registro).toLocaleDateString() %></span>
+                                    </div>
+                                </div>
+                                
+                                <!-- Sinopsis -->
+                                <div class="col-12 mb-4">
+                                    <h6 class="text-verde-oscuro mb-2">Sinopsis</h6>
+                                    <p class="text-verde-medio">
+                                        <%= libro.sinopsis || 'No hay sinopsis disponible.' %>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Estilos adicionales para la vista de detalles */
+    .detail-item {
+        margin-bottom: 0.5rem;
+    }
+    .detail-label {
+        font-weight: 600;
+        color: var(--verde-oscuro);
+        margin-right: 0.5rem;
+    }
+    .detail-value {
+        color: var(--verde-oscuro);
+    }
+    .book-cover-container {
+        background-color: var(--verde-claro);
+        padding: 1rem;
+        border-radius: 0.5rem;
+    }
+    #bookDetailTabs .nav-link {
+        color: var(--verde-oscuro);
+        border: none;
+        padding: 0.75rem 1rem;
+    }
+    #bookDetailTabs .nav-link.active {
+        color: var(--verde-oscuro);
+        border-bottom: 2px solid var(--verde-oscuro);
+        background-color: transparent;
+        font-weight: 500;
+    }
+    #bookDetailTabs .nav-link:hover:not(.active) {
+        color: var(--verde-medio);
+        border-bottom: 2px solid var(--verde-medio);
+    }
+</style>

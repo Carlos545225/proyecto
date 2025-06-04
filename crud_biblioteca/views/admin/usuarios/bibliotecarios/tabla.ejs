@@ -1,0 +1,92 @@
+<!-- Buscador personalizado para Bibliotecarios -->
+<div class="card mb-3 border-0 shadow-sm bg-light-custom">
+    <div class="card-body p-3">
+        <div class="row g-2">
+            <div class="col-md-8">
+                <div class="input-group search-custom">
+                    <span class="input-group-text bg-white border-end-0"><i class="bi bi-search text-verde-medio"></i></span>
+                    <input type="text" id="buscar-bibliotecarios" class="form-control border-start-0 ps-0" placeholder="Buscar por nombre, email, usuario...">
+                    <button class="btn btn-verde-medio text-white" type="button">Buscar</button>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <select class="form-select select-custom border" id="filtro-turno-biblio">
+                    <option value="">Todos los turnos</option>
+                    <option value="mañana">Mañana</option>
+                    <option value="tarde">Tarde</option>
+                    <option value="noche">Noche</option>
+                </select>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Tabla de Bibliotecarios -->
+<div class="table-responsive table-container-custom">
+    <table class="table table-custom">
+        <thead>
+            <tr>
+                <th class="th-custom">ID</th>
+                <th class="th-custom">Nombre</th>
+                <th class="th-custom">Apellido</th>
+                <th class="th-custom">Email</th>
+                <th class="th-custom">Usuario</th>
+                <th class="th-custom">Turno</th>
+                <th class="th-custom">Estado</th>
+                <th class="th-custom">Fecha Registro</th>
+                <th class="th-custom text-center">Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>1</td>
+                <td>Ana</td>
+                <td>Martínez</td>
+                <td>ana@biblioteca.com</td>
+                <td>biblio_ana</td>
+                <td>Mañana</td>
+                <td><span class="badge badge-custom badge-success">Activo</span></td>
+                <td>10/01/2024</td>
+                <td>
+                    <button class="btn btn-sm btn-outline-primary me-1" title="Editar"><i class="bi bi-pencil-square"></i></button>
+                    <button class="btn btn-sm btn-outline-danger" title="Eliminar"><i class="bi bi-trash3-fill"></i></button>
+                </td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>Pedro</td>
+                <td>López</td>
+                <td>pedro@biblioteca.com</td>
+                <td>biblio_pedro</td>
+                <td>Tarde</td>
+                <td><span class="badge badge-custom badge-success">Activo</span></td>
+                <td>20/02/2024</td>
+                <td>
+                    <button class="btn btn-sm btn-outline-primary me-1" title="Editar"><i class="bi bi-pencil-square"></i></button>
+                    <button class="btn btn-sm btn-outline-danger" title="Eliminar"><i class="bi bi-trash3-fill"></i></button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <!-- Paginación personalizada para Bibliotecarios -->
+    <div class="pagination-container">
+        <div class="pagination-info">
+            Mostrando <span class="fw-bold">1-2</span> de <span class="fw-bold">2</span> bibliotecarios
+        </div>
+        <nav aria-label="Paginación de bibliotecarios">
+            <ul class="pagination pagination-custom">
+                <li class="page-item disabled">
+                    <a class="page-link" href="#" aria-label="Anterior">
+                        <span aria-hidden="true"><i class="bi bi-chevron-left"></i></span>
+                    </a>
+                </li>
+                <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                <li class="page-item disabled">
+                    <a class="page-link" href="#" aria-label="Siguiente">
+                        <span aria-hidden="true"><i class="bi bi-chevron-right"></i></span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div> 

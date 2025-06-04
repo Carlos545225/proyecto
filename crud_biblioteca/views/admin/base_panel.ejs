@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Biblioteca - El Rincón Verde</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="/stylesheets/style.css">
+    <link rel="stylesheet" href="/stylesheets/tables-custom.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="d-flex" id="wrapper">
+        <div class="bg-verde-oscuro sidebar-wrapper" id="sidebar-wrapper">
+            <div class="sidebar-heading text-center py-4 fs-4 fw-bold text-white">
+                <i class="bi bi-tree-fill me-2"></i>El Rincón Verde
+            </div>
+            <div class="list-group list-group-flush my-3">
+                <a href="/admin" class="list-group-item list-group-item-action <% if (active === 'panel') { %>active<% } %>">
+                    <i class="bi bi-speedometer2 me-2"></i>Panel Principal
+                </a>
+                <a href="/admin/libros" class="list-group-item list-group-item-action <% if (active === 'libros') { %>active<% } %>">
+                    <i class="bi bi-book-fill me-2"></i>Gestión de Libros
+                </a>
+                <a href="/admin/usuarios" class="list-group-item list-group-item-action <% if (active === 'usuarios') { %>active<% } %>">
+                    <i class="bi bi-people-fill me-2"></i>Gestión de Usuarios
+                </a>
+                <a href="/admin/reportes" class="list-group-item list-group-item-action <% if (active === 'reportes') { %>active<% } %>">
+                    <i class="bi bi-journal-check me-2"></i>Reportes
+                </a>
+                <a href="/admin/perfil" class="list-group-item list-group-item-action <% if (active === 'perfil') { %>active<% } %>">
+                    <i class="bi bi-person-circle me-2"></i>Mi Cuenta
+                </a>
+            </div>
+        </div>
+        <div id="page-content-wrapper">
+            <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom shadow-sm">
+                <div class="container-fluid">
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="navbar-nav ms-auto mt-2 mt-lg-0">
+                            <li class="nav-item"> <a class="nav-link" href="/logout">Salir <i class="bi bi-box-arrow-right"></i></a> </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+
+            <%- body %>
+            
+            <footer class="pt-4 my-md-5 pt-md-5 border-top">
+                <div class="row">
+                    <div class="col-12 text-center">
+                        <small class="d-block mb-3 text-muted">© 2024 Biblioteca El Rincón Verde.</small>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</body>
+</html>

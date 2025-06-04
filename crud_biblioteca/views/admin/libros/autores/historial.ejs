@@ -1,0 +1,115 @@
+<!-- Contenido Principal -->
+<div class="container-fluid dashboard-container px-4 py-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+                    <h5 class="card-title text-verde-oscuro mb-0"><i class="bi bi-clock-history me-2"></i>Historial de Autores</h5>
+                    <a href="/admin/libros?tab=autores" class="btn btn-outline-secondary btn-sm"><i class="bi bi-arrow-left me-1"></i>Volver</a>
+                </div>
+                <div class="card-body p-4">
+                    <% if (typeof success !== 'undefined' && success.length > 0) { %>
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <%= success %>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    <% } %>
+                    <% if (typeof error !== 'undefined' && error.length > 0) { %>
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <%= error %>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    <% } %>
+
+                    <!-- Buscador -->
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <form action="/admin/libros/autor/historial" method="GET" class="d-flex">
+                                <div class="input-group">
+                                    <input type="text" 
+                                           name="busqueda" 
+                                           class="form-control" 
+                                           placeholder="Buscar por nombre..."
+                                           value="<%= typeof filtros !== 'undefined' ? filtros.busqueda || '' : '' %>">
+                                    <button class="btn btn-verde-medio" type="submit">Buscar</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Tabla -->
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nombre Completo</th>
+                                    <th>Nacionalidad</th>
+                                    <th>Fecha Nacimiento</th>
+                                    <th>Fecha Fallecimiento</th>
+                                    <th>Fecha Desactivación</th>
+                                    <th class="text-center">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% if (typeof autores !== 'undefined' && autores.length > 0) { %>
+                                    <% autores.forEach(function(autor) { %>
+                                        <tr>
+                                            <td><%= autor.id %></td>
+                                            <td title="<%= autor.nombre_completo %>"><%= autor.nombre_completo.length > 15 ? autor.nombre_completo.substring(0, 15) + '...' : autor.nombre_completo %></td>
+                                            <td title="<%= autor.nacionalidad %>"><%= autor.nacionalidad.length > 15 ? autor.nacionalidad.substring(0, 15) + '...' : autor.nacionalidad %></td>
+                                            <td><%= new Date(autor.fecha_nacimiento).toLocaleDateString() %></td>
+                                            <td>
+                                                <%= autor.fecha_fallecimiento ? new Date(autor.fecha_fallecimiento).toLocaleDateString() : 'Vivo' %>
+                                            </td>
+                                            <td><%= new Date(autor.ultima_actualizacion).toLocaleDateString() %></td>
+                                            <td class="text-center">
+                                                <a href="/admin/libros/autor/restaurar/<%= autor.id %>" 
+                                                   class="btn btn-sm btn-success"
+                                                   onclick="return confirm('¿Está seguro de que desea restaurar este autor?')">
+                                                    <i class="bi bi-arrow-counterclockwise"></i> Restaurar
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    <% }); %>
+                                <% } else { %>
+                                    <tr>
+                                        <td colspan="7" class="text-center">No hay autores en el historial</td>
+                                    </tr>
+                                <% } %>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Paginación -->
+                    <% if (typeof paginacion !== 'undefined' && paginacion.totalPaginas > 1) { %>
+                        <nav aria-label="Paginación del historial">
+                            <ul class="pagination justify-content-center">
+                                <li class="page-item <%= paginacion.pagina === 1 ? 'disabled' : '' %>">
+                                    <a class="page-link" 
+                                       href="?page=<%= paginacion.pagina - 1 %>&busqueda=<%= typeof filtros !== 'undefined' ? filtros.busqueda || '' : '' %>">
+                                        Anterior
+                                    </a>
+                                </li>
+                                <% for(let i = 1; i <= paginacion.totalPaginas; i++) { %>
+                                    <li class="page-item <%= i === paginacion.pagina ? 'active' : '' %>">
+                                        <a class="page-link" 
+                                           href="?page=<%= i %>&busqueda=<%= typeof filtros !== 'undefined' ? filtros.busqueda || '' : '' %>">
+                                            <%= i %>
+                                        </a>
+                                    </li>
+                                <% } %>
+                                <li class="page-item <%= paginacion.pagina === paginacion.totalPaginas ? 'disabled' : '' %>">
+                                    <a class="page-link" 
+                                       href="?page=<%= paginacion.pagina + 1 %>&busqueda=<%= typeof filtros !== 'undefined' ? filtros.busqueda || '' : '' %>">
+                                        Siguiente
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

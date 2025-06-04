@@ -1,0 +1,248 @@
+<!-- Contenido Principal de Reportes -->
+<div class="container-fluid dashboard-container px-4 py-4">
+
+    <!-- Encabezado de Reportes -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="text-verde-oscuro mb-0"><i class="bi bi-bar-chart-fill me-2"></i>Reportes</h2>
+            <p class="text-muted">Estadísticas de la biblioteca</p>
+        </div>
+        <div>
+            <button class="btn btn-sm btn-outline-success me-2"><i class="bi bi-file-earmark-excel me-2"></i>Excel</button>
+            <button class="btn btn-sm btn-outline-danger"><i class="bi bi-file-earmark-pdf me-2"></i>PDF</button>
+        </div>
+    </div>
+    
+    <!-- Estadísticas Generales -->
+    <h5 class="main-title mb-3">Estadísticas Generales</h5>
+    
+    <!-- Tarjetas de Estadísticas en formato compacto -->
+    <div class="row g-3 mb-4">
+        <!-- Libros -->
+        <div class="col-6 col-md-3">
+            <div class="stat-card bg-white rounded shadow-sm p-3 h-100 border-start border-verde-medio border-3">
+                <div class="d-flex align-items-center">
+                    <div class="stat-icon rounded-circle bg-verde-claro p-2 me-3">
+                        <i class="bi bi-book text-verde-oscuro"></i>
+                    </div>
+                    <div>
+                        <h3 class="fs-5 mb-0">250</h3>
+                        <p class="text-muted small mb-0">Libros</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Usuarios -->
+        <div class="col-6 col-md-3">
+            <div class="stat-card bg-white rounded shadow-sm p-3 h-100 border-start border-verde-oscuro border-3">
+                <div class="d-flex align-items-center">
+                    <div class="stat-icon rounded-circle bg-verde-oscuro p-2 me-3">
+                        <i class="bi bi-people text-white"></i>
+                    </div>
+                    <div>
+                        <h3 class="fs-5 mb-0">120</h3>
+                        <p class="text-muted small mb-0">Usuarios</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Préstamos -->
+        <div class="col-6 col-md-3">
+            <div class="stat-card bg-white rounded shadow-sm p-3 h-100 border-start border-ocre border-3">
+                <div class="d-flex align-items-center">
+                    <div class="stat-icon rounded-circle bg-ocre p-2 me-3">
+                        <i class="bi bi-journal-arrow-up text-white"></i>
+                    </div>
+                    <div>
+                        <h3 class="fs-5 mb-0">1,458</h3>
+                        <p class="text-muted small mb-0">Préstamos</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Categorías -->
+        <div class="col-6 col-md-3">
+            <div class="stat-card bg-white rounded shadow-sm p-3 h-100 border-start border-verde-claro border-3">
+                <div class="d-flex align-items-center">
+                    <div class="stat-icon rounded-circle bg-verde-claro p-2 me-3">
+                        <i class="bi bi-tags text-verde-oscuro"></i>
+                    </div>
+                    <div>
+                        <h3 class="fs-5 mb-0">18</h3>
+                        <p class="text-muted small mb-0">Categorías</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Estadísticas Detalladas -->
+    <div class="row g-3 mb-4">
+        <!-- Libros por Categoría -->
+        <div class="col-md-6">
+            <div class="bg-white rounded shadow-sm p-3 h-100">
+                <h6 class="border-bottom pb-2 mb-3">Libros por Categoría</h6>
+                <div class="table-responsive">
+                    <table class="table table-sm table-borderless mb-0">
+                        <tbody>
+                            <tr>
+                                <td>Novela</td>
+                                <td class="text-end">65</td>
+                            </tr>
+                            <tr>
+                                <td>Ciencia Ficción</td>
+                                <td class="text-end">42</td>
+                            </tr>
+                            <tr>
+                                <td>Historia</td>
+                                <td class="text-end">38</td>
+                            </tr>
+                            <tr>
+                                <td>Biografía</td>
+                                <td class="text-end">25</td>
+                            </tr>
+                            <tr>
+                                <td>Infantil</td>
+                                <td class="text-end">35</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    
+        <!-- Libros Más Populares -->
+        <div class="col-md-6">
+            <div class="bg-white rounded shadow-sm p-3 h-100">
+                <h6 class="border-bottom pb-2 mb-3">Libros Más Populares</h6>
+                <div class="table-responsive">
+                    <table class="table table-sm mb-0">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Título</th>
+                                <th>Préstamos</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><span class="badge bg-warning text-dark">1</span></td>
+                                <td>Cien Años de Soledad</td>
+                                <td>42</td>
+                            </tr>
+                            <tr>
+                                <td><span class="badge bg-secondary text-white">2</span></td>
+                                <td>El Principito</td>
+                                <td>38</td>
+                            </tr>
+                            <tr>
+                                <td><span class="badge bg-ocre text-white">3</span></td>
+                                <td>Don Quijote de la Mancha</td>
+                                <td>35</td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                                <td>Harry Potter y la Piedra Filosofal</td>
+                                <td>30</td>
+                            </tr>
+                            <tr>
+                                <td>5</td>
+                                <td>1984</td>
+                                <td>28</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Estadísticas Adicionales -->
+    <h5 class="main-title mb-3">Estadísticas Adicionales</h5>
+    
+    <div class="row g-3 mb-4">
+        <!-- Usuarios por Tipo -->
+        <div class="col-md-6">
+            <div class="bg-white rounded shadow-sm p-3 h-100">
+                <h6 class="border-bottom pb-2 mb-3">Usuarios por Tipo</h6>
+                <div class="d-flex flex-column">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span>Administradores</span>
+                        <span class="badge bg-verde-oscuro">5</span>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span>Bibliotecarios</span>
+                        <span class="badge bg-verde-medio">12</span>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span>Lectores Premium</span>
+                        <span class="badge bg-ocre">45</span>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span>Lectores Básicos</span>
+                        <span class="badge bg-verde-claro">58</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Usuarios Más Activos -->
+        <div class="col-md-6">
+            <div class="bg-white rounded shadow-sm p-3 h-100">
+                <h6 class="border-bottom pb-2 mb-3">Usuarios Más Activos</h6>
+                <div class="table-responsive">
+                    <table class="table table-sm mb-0">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Usuario</th>
+                                <th>Préstamos</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><span class="badge bg-warning text-dark">1</span></td>
+                                <td>Laura Sánchez</td>
+                                <td>15</td>
+                            </tr>
+                            <tr>
+                                <td><span class="badge bg-secondary text-white">2</span></td>
+                                <td>Miguel Torres</td>
+                                <td>12</td>
+                            </tr>
+                            <tr>
+                                <td><span class="badge bg-ocre text-white">3</span></td>
+                                <td>Sofía Ramírez</td>
+                                <td>10</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Filtro de Fechas Simple -->
+    <div class="bg-white rounded shadow-sm p-3 mb-4">
+        <div class="row g-2 align-items-center">
+            <div class="col-auto">
+                <label class="col-form-label col-form-label-sm">Filtrar por fecha:</label>
+            </div>
+            <div class="col-md-3">
+                <input type="date" class="form-control form-control-sm" value="2024-01-01">
+            </div>
+            <div class="col-auto">
+                <span class="form-text">a</span>
+            </div>
+            <div class="col-md-3">
+                <input type="date" class="form-control form-control-sm" value="2024-05-30">
+            </div>
+            <div class="col-auto">
+                <button class="btn btn-sm btn-verde-medio"><i class="bi bi-search me-1"></i>Filtrar</button>
+            </div>
+        </div>
+    </div>
+</div>
