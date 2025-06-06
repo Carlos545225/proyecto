@@ -1,0 +1,148 @@
+<!-- Contenido Principal -->
+<div class="container-fluid dashboard-container px-4 py-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+                    <h5 class="card-title text-verde-oscuro mb-0">
+                        <i class="bi bi-clock-history me-2"></i>Historial de Editoriales
+                    </h5>
+                    <a href="/admin/libros?tab=editoriales" class="btn btn-outline-secondary btn-sm">
+                        <i class="bi bi-arrow-left me-1"></i>Volver
+                    </a>
+                </div>
+                <div class="card-body p-4">
+                    <!-- Mensajes de éxito/error -->
+                    <% if (typeof success !== 'undefined' && success.length > 0) { %>
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <%= success %>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    <% } %>
+                    <% if (typeof error !== 'undefined' && error.length > 0) { %>
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <%= error %>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    <% } %>
+
+                    <!-- Buscador -->
+                    <div class="card mb-3 border-0 shadow-sm bg-light-custom">
+                        <div class="card-body p-3">
+                            <form action="/admin/libros/editorial/historial" method="GET" class="row g-2">
+                                <div class="col-md-12">
+                                    <div class="input-group search-custom">
+                                        <span class="input-group-text bg-white border-end-0">
+                                            <i class="bi bi-search text-verde-medio"></i>
+                                        </span>
+                                        <input type="text" 
+                                               name="busqueda" 
+                                               class="form-control border-start-0 ps-0" 
+                                               placeholder="Buscar por nombre, código, país..."
+                                               value="<%= typeof busqueda !== 'undefined' ? busqueda : '' %>">
+                                        <button class="btn btn-verde-medio text-white" type="submit">Buscar</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Tabla de Editoriales Inactivas -->
+                    <div class="table-responsive table-container-custom">
+                        <table class="table table-custom">
+                            <thead>
+                                <tr>
+                                    <th class="th-custom col-id">ID</th>
+                                    <th class="th-custom">Nombre</th>
+                                    <th class="th-custom">Código</th>
+                                    <th class="th-custom">País</th>
+                                    <th class="th-custom">Año</th>
+                                    <th class="th-custom">Email</th>
+                                    <th class="th-custom">Sitio Web</th>
+                                    <th class="th-custom">Fecha Desactivación</th>
+                                    <th class="th-custom text-center col-acciones">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% if (typeof editoriales !== 'undefined' && editoriales.length > 0) { %>
+                                    <% editoriales.forEach(editorial => { %>
+                                        <tr>
+                                            <td><%= editorial.id %></td>
+                                            <td class="text-truncate-tooltip" data-title="<%= editorial.nombre %>">
+                                                <%= editorial.nombre.length > 15 ? editorial.nombre.substring(0, 15) + '...' : editorial.nombre %>
+                                            </td>
+                                            <td><%= editorial.codigo %></td>
+                                            <td><%= editorial.pais %></td>
+                                            <td><%= editorial.anio_fundacion || 'N/A' %></td>
+                                            <td class="text-truncate-tooltip" data-title="<%= editorial.email_contacto || 'N/A' %>">
+                                                <%= editorial.email_contacto ? (editorial.email_contacto.length > 15 ? editorial.email_contacto.substring(0, 15) + '...' : editorial.email_contacto) : 'N/A' %>
+                                            </td>
+                                            <td class="text-truncate-tooltip" data-title="<%= editorial.sitio_web || 'N/A' %>">
+                                                <%= editorial.sitio_web ? (editorial.sitio_web.length > 15 ? editorial.sitio_web.substring(0, 15) + '...' : editorial.sitio_web) : 'N/A' %>
+                                            </td>
+                                            <td><%= new Date(editorial.ultima_actualizacion).toLocaleDateString('es-ES', { 
+                                                day: '2-digit', 
+                                                month: '2-digit', 
+                                                year: 'numeric',
+                                                hour: '2-digit',
+                                                minute: '2-digit'
+                                            }) %></td>
+                                            <td class="text-center">
+                                                <a href="/admin/libros/editorial/restaurar/<%= editorial.id %>" 
+                                                   class="btn-action btn-success" 
+                                                   title="Restaurar"
+                                                   onclick="return confirm('¿Está seguro de que desea restaurar esta editorial?')">
+                                                    <i class="bi bi-arrow-counterclockwise"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    <% }); %>
+                                <% } else { %>
+                                    <tr>
+                                        <td colspan="9" class="text-center py-4">
+                                            <div class="alert alert-info mb-0">
+                                                <i class="bi bi-info-circle me-2"></i>
+                                                No se encontraron editoriales en el historial
+                                                <% if (typeof busqueda !== 'undefined' && busqueda) { %>
+                                                    que coincidan con la búsqueda
+                                                <% } %>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                <% } %>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Paginación -->
+                    <% if (typeof paginacion !== 'undefined' && paginacion.totalPaginas > 1) { %>
+                        <nav aria-label="Paginación del historial">
+                            <ul class="pagination justify-content-center">
+                                <li class="page-item <%= paginacion.pagina === 1 ? 'disabled' : '' %>">
+                                    <a class="page-link" 
+                                       href="?page=<%= paginacion.pagina - 1 %>&busqueda=<%= typeof busqueda !== 'undefined' ? busqueda : '' %>">
+                                        Anterior
+                                    </a>
+                                </li>
+                                <% for(let i = 1; i <= paginacion.totalPaginas; i++) { %>
+                                    <li class="page-item <%= i === paginacion.pagina ? 'active' : '' %>">
+                                        <a class="page-link" 
+                                           href="?page=<%= i %>&busqueda=<%= typeof busqueda !== 'undefined' ? busqueda : '' %>">
+                                            <%= i %>
+                                        </a>
+                                    </li>
+                                <% } %>
+                                <li class="page-item <%= paginacion.pagina === paginacion.totalPaginas ? 'disabled' : '' %>">
+                                    <a class="page-link" 
+                                       href="?page=<%= paginacion.pagina + 1 %>&busqueda=<%= typeof busqueda !== 'undefined' ? busqueda : '' %>">
+                                        Siguiente
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

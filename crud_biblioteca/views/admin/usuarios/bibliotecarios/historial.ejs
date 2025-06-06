@@ -1,0 +1,137 @@
+<!-- Contenido Principal -->
+<div class="container-fluid dashboard-container px-4 py-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+                    <h5 class="card-title text-verde-oscuro mb-0"><i class="bi bi-clock-history me-2"></i>Historial de Bibliotecarios</h5>
+                    <a href="/admin/usuarios?tab=bibliotecarios" class="btn btn-secondary">Volver</a>
+                </div>
+                <div class="card-body p-4">
+                    <!-- Formulario de búsqueda -->
+                    <form action="/admin/usuarios/bibliotecario/historial" method="GET" class="mb-4">
+                        <div class="row g-3">
+                            <div class="col-md-8">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" name="busqueda" placeholder="Buscar por nombre, apellidos, email o documento...">
+                                    <button class="btn btn-verde" type="submit">
+                                        <i class="bi bi-search me-1"></i>Buscar
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="col-md-4 text-md-end">
+                                <a href="/admin/usuarios/bibliotecario/historial" class="btn btn-outline-verde">
+                                    <i class="bi bi-x-circle me-1"></i>Limpiar filtros
+                                </a>
+                            </div>
+                        </div>
+                    </form>
+
+                    <!-- Tabla de bibliotecarios -->
+                    <div class="table-responsive table-container-custom">
+                        <table class="table table-custom">
+                            <thead>
+                                <tr>
+                                    <th class="th-custom">ID</th>
+                                    <th class="th-custom">Nombre</th>
+                                    <th class="th-custom">Apellidos</th>
+                                    <th class="th-custom">Email</th>
+                                    <th class="th-custom">Documento</th>
+                                    <th class="th-custom">Turno</th>
+                                    <th class="th-custom">Teléfono</th>
+                                    <th class="th-custom">Fecha de Eliminación</th>
+                                    <th class="th-custom text-center">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% if (bibliotecarios && bibliotecarios.length > 0) { %>
+                                    <% bibliotecarios.forEach(bibliotecario => { %>
+                                        <tr>
+                                            <td><%= bibliotecario.id %></td>
+                                            <td><%= bibliotecario.nombre %></td>
+                                            <td><%= bibliotecario.apellidos %></td>
+                                            <td><%= bibliotecario.email %></td>
+                                            <td><%= bibliotecario.tipo_documento %> <%= bibliotecario.numero_documento %></td>
+                                            <td><%= bibliotecario.turno.charAt(0).toUpperCase() + bibliotecario.turno.slice(1) %></td>
+                                            <td><%= bibliotecario.telefono || 'No especificado' %></td>
+                                            <td><%= new Date(bibliotecario.ultima_actualizacion).toLocaleDateString() %></td>
+                                            <td class="text-center">
+                                                <div class="btn-group" role="group">
+                                                    <a href="/admin/usuarios/bibliotecario/ver/<%= bibliotecario.id %>" class="btn btn-sm btn-info text-white" title="Ver detalles">
+                                                        <i class="bi bi-eye"></i>
+                                                    </a>
+                                                    <a href="/admin/usuarios/bibliotecario/restaurar/<%= bibliotecario.id %>" class="btn btn-sm btn-success text-white" title="Restaurar bibliotecario" onclick="return confirm('¿Está seguro de restaurar este bibliotecario?')">
+                                                        <i class="bi bi-arrow-counterclockwise"></i>
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    <% }); %>
+                                <% } else { %>
+                                    <tr>
+                                        <td colspan="9" class="text-center">No hay bibliotecarios en el historial</td>
+                                    </tr>
+                                <% } %>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Paginación -->
+                    <div class="pagination-container">
+                        <div class="pagination-info">
+                            Mostrando <span class="fw-bold">1-10</span> 
+                            de <span class="fw-bold">50</span> registros
+                        </div>
+                        <nav aria-label="Paginación del historial">
+                            <ul class="pagination pagination-custom">
+                                <li class="page-item disabled">
+                                    <a class="page-link" href="#" aria-label="Anterior">
+                                        <span aria-hidden="true"><i class="bi bi-chevron-left"></i></span>
+                                    </a>
+                                </li>
+                                <li class="page-item active">
+                                    <a class="page-link" href="#">1</a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="#">2</a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="#">3</a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="#" aria-label="Siguiente">
+                                        <span aria-hidden="true"><i class="bi bi-chevron-right"></i></span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .pagination-container {
+        background-color: var(--verde-claro);
+        padding: 1rem;
+        border-radius: 0.5rem;
+    }
+    .pagination .page-link {
+        color: var(--verde-oscuro);
+        border-color: var(--verde-medio);
+    }
+    .pagination .page-item.active .page-link {
+        background-color: var(--verde-oscuro);
+        border-color: var(--verde-oscuro);
+    }
+    .pagination .page-link:hover {
+        color: var(--verde-medio);
+        background-color: var(--verde-claro);
+    }
+    .pagination .page-item.disabled .page-link {
+        color: #6c757d;
+        background-color: #fff;
+    }
+</style>
