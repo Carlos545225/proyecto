@@ -1,0 +1,141 @@
+<!-- Contenido Principal del CRUD -->
+<div class="container-fluid dashboard-container px-4 py-4">
+    <div class="card bg-white border-0 shadow-sm">
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h3 class="text-verde-oscuro mb-0">Registrar Devolución</h3>
+                <a href="/admin/prestamos?tab=prestamos" class="btn btn-outline-secondary">
+                    <i class="bi bi-arrow-left me-2"></i>Volver
+                </a>
+            </div>
+
+            <!-- Información del Préstamo -->
+            <div class="card mb-4 border-0 shadow-sm bg-light-custom">
+                <div class="card-body">
+                    <h5 class="card-title mb-3">Información del Préstamo</h5>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong>Lector:</strong> <%= prestamo.lector_nombre %></p>
+                            <p><strong>Libro:</strong> <%= prestamo.libro_titulo %></p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Fecha de Préstamo:</strong> <%= new Date(prestamo.fecha_prestamo).toLocaleDateString() %></p>
+                            <p><strong>Fecha de Devolución Esperada:</strong> <%= new Date(prestamo.fecha_devolucion_esperada).toLocaleDateString() %></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Formulario de Devolución -->
+            <form action="/admin/prestamos/devoluciones/registrar/<%= prestamo.id %>" method="POST" class="needs-validation" novalidate>
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body">
+                        <div class="row g-3">
+                            <!-- Estado del Libro -->
+                            <div class="col-md-6">
+                                <label for="estado_libro" class="form-label">Estado del Libro</label>
+                                <select class="form-select" id="estado_libro" name="estado_libro" required>
+                                    <option value="">Seleccione el estado...</option>
+                                    <option value="bueno" <%= estado_libro === 'bueno' ? 'selected' : '' %>>Bueno</option>
+                                    <option value="deteriorado" <%= estado_libro === 'deteriorado' ? 'selected' : '' %>>Deteriorado</option>
+                                    <option value="perdido" <%= estado_libro === 'perdido' ? 'selected' : '' %>>Perdido</option>
+                                </select>
+                                <div class="invalid-feedback">
+                                    Por favor seleccione el estado del libro
+                                </div>
+                            </div>
+
+                            <!-- Fecha de Devolución -->
+                            <div class="col-md-6">
+                                <label for="fecha_devolucion" class="form-label">Fecha de Devolución</label>
+                                <input type="datetime-local" 
+                                       class="form-control" 
+                                       id="fecha_devolucion" 
+                                       name="fecha_devolucion" 
+                                       value="<%= fecha_devolucion %>"
+                                       required>
+                                <div class="invalid-feedback">
+                                    Por favor ingrese la fecha de devolución
+                                </div>
+                            </div>
+
+                            <!-- Observaciones -->
+                            <div class="col-12">
+                                <label for="observaciones" class="form-label">Observaciones</label>
+                                <textarea class="form-control" 
+                                          id="observaciones" 
+                                          name="observaciones" 
+                                          rows="3"
+                                          placeholder="Ingrese observaciones sobre la devolución..."></textarea>
+                            </div>
+
+                            <!-- Cálculo de Multa -->
+                            <div class="col-12">
+                                <div class="card bg-light-custom border-0">
+                                    <div class="card-body">
+                                        <h5 class="card-title mb-3">Cálculo de Multa</h5>
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <label class="form-label">Días de Atraso</label>
+                                                <input type="text" class="form-control" value="<%= diasAtraso %> días" readonly>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label class="form-label">Monto por Día</label>
+                                                <input type="text" class="form-control" value="$5.00" readonly>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label class="form-label">Multa Total</label>
+                                                <input type="text" class="form-control" value="$<%= multaTotal.toFixed(2) %>" readonly>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Botones de Acción -->
+                            <div class="col-12 mt-4">
+                                <button type="submit" class="btn btn-leaf">
+                                    <i class="bi bi-check-circle-fill me-2"></i>Registrar Devolución
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Validación del formulario
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.querySelector('form');
+        const estadoLibroSelect = document.getElementById('estado_libro');
+        const fechaDevolucionInput = document.getElementById('fecha_devolucion');
+
+        // Validación del formulario
+        form.addEventListener('submit', function(event) {
+            if (!form.checkValidity()) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+            form.classList.add('was-validated');
+        });
+
+        // Actualizar el formulario cuando cambien los campos
+        estadoLibroSelect.addEventListener('change', actualizarFormulario);
+        fechaDevolucionInput.addEventListener('change', actualizarFormulario);
+
+        function actualizarFormulario() {
+            if (estadoLibroSelect.value && fechaDevolucionInput.value) {
+                // Crear URL con los parámetros
+                const url = new URL(window.location.href);
+                url.searchParams.set('estado_libro', estadoLibroSelect.value);
+                url.searchParams.set('fecha_devolucion', fechaDevolucionInput.value);
+                
+                // Redirigir a la URL con los parámetros
+                window.location.href = url.toString();
+            }
+        }
+    });
+</script> 

@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Comprobante de Préstamo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.4;
+            color: #333;
+            margin: 0;
+            padding: 15px;
+            font-size: 12px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #2c3e50;
+            padding-bottom: 10px;
+        }
+        .header h1 {
+            color: #2c3e50;
+            margin: 0;
+            font-size: 20px;
+        }
+        .header p {
+            color: #7f8c8d;
+            margin: 3px 0 0;
+            font-size: 14px;
+        }
+        .section {
+            margin-bottom: 10px;
+            padding: 8px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+        }
+        .section-title {
+            color: #2c3e50;
+            font-size: 14px;
+            margin-bottom: 8px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 3px;
+        }
+        .info-row {
+            display: flex;
+            margin-bottom: 5px;
+        }
+        .info-label {
+            font-weight: bold;
+            width: 180px;
+            color: #34495e;
+        }
+        .info-value {
+            flex: 1;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 15px;
+            padding-top: 10px;
+            border-top: 2px solid #2c3e50;
+            color: #7f8c8d;
+            font-size: 10px;
+        }
+        .status {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-weight: bold;
+            font-size: 11px;
+        }
+        .status-returned {
+            background-color: #2ecc71;
+            color: white;
+        }
+        .status-borrowed {
+            background-color: #f1c40f;
+            color: #2c3e50;
+        }
+        .grid-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        .warning-box {
+            background-color: #fff3cd;
+            border: 1px solid #ffeeba;
+            color: #856404;
+            padding: 10px;
+            margin-bottom: 15px;
+            border-radius: 4px;
+        }
+        .warning-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #856404;
+        }
+        .warning-text {
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>El Rincón Verde</h1>
+        <p>Comprobante de Préstamo</p>
+    </div>
+
+    <% if (prestamo.fecha_devolucion_real && prestamo.monto_multa > 0) { %>
+        <div class="warning-box">
+            <div class="warning-title">Multa por Devolución Tardía</div>
+            <p class="warning-text">Este préstamo tiene una multa de <strong>$<%= prestamo.monto_multa.toFixed(2) %></strong> por devolución tardía.</p>
+        </div>
+    <% } %>
+
+    <div class="grid-container">
+        <div class="section">
+            <div class="section-title">Información del Préstamo</div>
+            <div class="info-row">
+                <div class="info-label">ID del Préstamo:</div>
+                <div class="info-value"><%= prestamo.id %></div>
+            </div>
+            <div class="info-row">
+                <div class="info-label">Estado:</div>
+                <div class="info-value">
+                    <% if (prestamo.fecha_devolucion_real) { %>
+                        <span class="status status-returned">Devuelto</span>
+                    <% } else { %>
+                        <span class="status status-borrowed">Prestado</span>
+                    <% } %>
+                </div>
+            </div>
+            <div class="info-row">
+                <div class="info-label">Fecha de Préstamo:</div>
+                <div class="info-value"><%= new Date(prestamo.fecha_prestamo).toLocaleDateString() %></div>
+            </div>
+            <div class="info-row">
+                <div class="info-label">Fecha de Devolución:</div>
+                <div class="info-value"><%= new Date(prestamo.fecha_devolucion_esperada).toLocaleDateString() %></div>
+            </div>
+            <% if (prestamo.fecha_devolucion_real) { %>
+                <div class="info-row">
+                    <div class="info-label">Devolución Real:</div>
+                    <div class="info-value"><%= new Date(prestamo.fecha_devolucion_real).toLocaleDateString() %></div>
+                </div>
+                <% if (prestamo.monto_multa > 0) { %>
+                    <div class="info-row">
+                        <div class="info-label">Días de Atraso:</div>
+                        <div class="info-value">
+                            <% 
+                                const fechaEsperada = new Date(prestamo.fecha_devolucion_esperada);
+                                const fechaReal = new Date(prestamo.fecha_devolucion_real);
+                                const diasAtraso = Math.ceil((fechaReal - fechaEsperada) / (1000 * 60 * 60 * 24));
+                            %>
+                            <%= diasAtraso %> días
+                        </div>
+                    </div>
+                <% } %>
+            <% } %>
+        </div>
+
+        <div class="section">
+            <div class="section-title">Información del Lector</div>
+            <div class="info-row">
+                <div class="info-label">Nombre:</div>
+                <div class="info-value"><%= prestamo.lector_nombre %></div>
+            </div>
+            <div class="info-row">
+                <div class="info-label">Documento:</div>
+                <div class="info-value"><%= prestamo.lector_documento %></div>
+            </div>
+            <div class="info-row">
+                <div class="info-label">Email:</div>
+                <div class="info-value"><%= prestamo.lector_email %></div>
+            </div>
+            <div class="info-row">
+                <div class="info-label">Teléfono:</div>
+                <div class="info-value"><%= prestamo.lector_telefono || 'No registrado' %></div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">Información del Libro</div>
+            <div class="info-row">
+                <div class="info-label">Título:</div>
+                <div class="info-value"><%= prestamo.libro_titulo %></div>
+            </div>
+            <div class="info-row">
+                <div class="info-label">ISBN:</div>
+                <div class="info-value"><%= prestamo.libro_isbn %></div>
+            </div>
+            <div class="info-row">
+                <div class="info-label">Autor:</div>
+                <div class="info-value"><%= prestamo.libro_autor %></div>
+            </div>
+            <div class="info-row">
+                <div class="info-label">Editorial:</div>
+                <div class="info-value"><%= prestamo.libro_editorial %></div>
+            </div>
+        </div>
+
+        <% if (prestamo.observaciones || prestamo.fecha_devolucion_real) { %>
+            <div class="section">
+                <div class="section-title">Información Adicional</div>
+                <% if (prestamo.observaciones) { %>
+                    <div class="info-row">
+                        <div class="info-label">Observaciones:</div>
+                        <div class="info-value"><%= prestamo.observaciones %></div>
+                    </div>
+                <% } %>
+                <% if (prestamo.fecha_devolucion_real) { %>
+                    <div class="info-row">
+                        <div class="info-label">Estado del Libro:</div>
+                        <div class="info-value">
+                            <% 
+                                const estados = {
+                                    'bueno': 'Bueno',
+                                    'deteriorado': 'Deteriorado',
+                                    'perdido': 'Perdido'
+                                };
+                            %>
+                            <%= estados[prestamo.estado_libro] || 'No especificado' %>
+                        </div>
+                    </div>
+                <% } %>
+            </div>
+        <% } %>
+    </div>
+
+    <div class="footer">
+        <p>Este documento es un comprobante oficial de El Rincón Verde</p>
+        <p>Fecha de emisión: <%= new Date().toLocaleDateString() %></p>
+    </div>
+</body>
+</html> 

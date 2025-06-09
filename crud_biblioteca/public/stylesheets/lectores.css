@@ -1,0 +1,102 @@
+/* ... (tus variables de color :root y estilos generales del body ya existentes) ... */
+/* ... (estilos de .user-page-background, .user-navbar) ... */
+
+.lector-view .navbar-nav .nav-link i { /* Iconos en navbar un poco más grandes */
+    font-size: 1.1em;
+    vertical-align: text-bottom;
+}
+
+.lector-welcome-section {
+    background-color: var(--gris-suave); /* Fondo suave para la bienvenida */
+    /* background-image: linear-gradient(135deg, var(--crema) 0%, var(--verde-claro-transparente) 100%); */
+    border: 1px solid var(--verde-claro);
+    position: relative; /* Para elementos decorativos */
+}
+.lector-welcome-section h1 {
+    font-family: 'Merriweather', serif;
+}
+
+.decorative-leaf-top-left,
+.decorative-leaf-bottom-right {
+    position: absolute;
+    font-size: 3rem; /* Ajusta el tamaño de las hojas */
+    color: var(--verde-claro);
+    opacity: 0.4;
+    user-select: none; /* Para que no se pueda seleccionar */
+}
+.decorative-leaf-top-left {
+    top: 10px;
+    left: 15px;
+    transform: rotate(-30deg);
+}
+.decorative-leaf-bottom-right {
+    bottom: 10px;
+    right: 15px;
+    transform: rotate(150deg) scaleX(-1);
+}
+
+
+.loan-summary-section .section-title-with-leaves {
+    position: relative;
+    display: inline-block; /* Para que ::before y ::after se posicionen relativo al span */
+    left: 50%;
+    transform: translateX(-50%);
+    margin-bottom: 2.5rem !important; /* Más espacio */
+}
+.section-title-with-leaves span {
+    position: relative;
+    z-index: 1;
+    background-color: var(--user-page-background-color, var(--crema)); /* Asegura que el fondo del texto cubra la línea */
+    padding: 0 15px;
+}
+.section-title-with-leaves::before,
+.section-title-with-leaves::after {
+    content: "🌿"; /* Puedes usar un SVG o una imagen también */
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.5rem; /* Tamaño de las hojas */
+    color: var(--verde-medio);
+    opacity: 0.7;
+}
+.section-title-with-leaves::before {
+    left: -30px; /* Ajusta la posición */
+}
+.section-title-with-leaves::after {
+    right: -30px; /* Ajusta la posición */
+    transform: translateY(-50%) scaleX(-1); /* Refleja la hoja */
+}
+
+
+.summary-item {
+    background-color: #fff; /* Fondo blanco para los items */
+    border: 1px solid var(--verde-claro);
+    transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
+}
+.summary-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.1) !important; /* Sombra más pronunciada */
+}
+.summary-item h5 {
+    color: var(--texto-oscuro);
+    font-weight: 600;
+}
+.summary-item .display-4 { /* Iconos dentro de los items */
+    margin-bottom: 0.5rem !important;
+}
+
+.btn-outline-verde-medio {
+    color: var(--verde-medio);
+    border-color: var(--verde-medio);
+    font-weight: 500;
+}
+.btn-outline-verde-medio:hover {
+    background-color: var(--verde-medio);
+    color: #fff;
+    border-color: var(--verde-medio);
+}
+
+/* El footer ya debería estar estilizado globalmente */
+/* .footer.mt-auto {
+    background-color: var(--verde-oscuro); (Ya definido)
+} */

@@ -1,0 +1,247 @@
+<!-- Contenido Principal -->
+<div class="container-fluid dashboard-container px-4 py-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+                    <h5 class="card-title text-verde-oscuro mb-0">
+                        <i class="bi bi-eye-fill me-2"></i>Detalles del Préstamo
+                    </h5>
+                    <div>
+                        <a href="/admin/prestamos/prestamos/exportar-pdf/<%= prestamo.id %>" class="btn btn-leaf me-2" target="_blank">
+                            <i class="bi bi-file-pdf me-1"></i>Exportar PDF
+                        </a>
+                        <a href="/admin/prestamos" class="btn btn-outline-secondary">
+                            <i class="bi bi-arrow-left me-1"></i>Volver
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body p-4" id="contenido-pdf">
+                    <!-- Encabezado del Recibo -->
+                    <div class="text-center mb-4">
+                        <h4 class="text-verde-oscuro mb-2">El Rincón Verde</h4>
+                        <p class="text-muted mb-0">Comprobante de Préstamo</p>
+                        <hr class="my-3">
+                    </div>
+
+                    <!-- Alerta de Multa si existe -->
+                    <% if (prestamo.fecha_devolucion_real && prestamo.monto_multa > 0) { %>
+                        <div class="alert alert-warning mb-4">
+                            <div class="d-flex align-items-center">
+                                <i class="bi bi-exclamation-triangle-fill me-2 fs-4"></i>
+                                <div>
+                                    <h5 class="alert-heading mb-1">Multa por Devolución Tardía</h5>
+                                    <p class="mb-0">Este préstamo tiene una multa de <strong>$<%= prestamo.monto_multa.toFixed(2) %></strong> por devolución tardía.</p>
+                                </div>
+                            </div>
+                        </div>
+                    <% } %>
+
+                    <div class="row">
+                        <!-- Información del Préstamo -->
+                        <div class="col-md-6">
+                            <div class="card bg-light-custom border-0 mb-4">
+                                <div class="card-body">
+                                    <h6 class="card-subtitle mb-3 text-verde-oscuro">
+                                        <i class="bi bi-book me-2"></i>Información del Préstamo
+                                    </h6>
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label fw-bold">ID del Préstamo:</label>
+                                            <p class="mb-0"><%= prestamo.id %></p>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label fw-bold">Estado:</label>
+                                            <p class="mb-0">
+                                                <% if (prestamo.fecha_devolucion_real) { %>
+                                                    <span class="badge bg-success">Devuelto</span>
+                                                <% } else { %>
+                                                    <span class="badge bg-warning text-dark">Prestado</span>
+                                                <% } %>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label fw-bold">Fecha de Préstamo:</label>
+                                            <p class="mb-0"><%= new Date(prestamo.fecha_prestamo).toLocaleDateString() %></p>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label fw-bold">Fecha de Devolución:</label>
+                                            <p class="mb-0"><%= new Date(prestamo.fecha_devolucion_esperada).toLocaleDateString() %></p>
+                                        </div>
+                                    </div>
+                                    <% if (prestamo.fecha_devolucion_real) { %>
+                                        <div class="row">
+                                            <div class="col-md-6 mb-3">
+                                                <label class="form-label fw-bold">Devolución Real:</label>
+                                                <p class="mb-0"><%= new Date(prestamo.fecha_devolucion_real).toLocaleDateString() %></p>
+                                            </div>
+                                            <% if (prestamo.monto_multa > 0) { %>
+                                                <div class="col-md-6 mb-3">
+                                                    <label class="form-label fw-bold">Días de Atraso:</label>
+                                                    <p class="mb-0">
+                                                        <% 
+                                                            const fechaEsperada = new Date(prestamo.fecha_devolucion_esperada);
+                                                            const fechaReal = new Date(prestamo.fecha_devolucion_real);
+                                                            const diasAtraso = Math.ceil((fechaReal - fechaEsperada) / (1000 * 60 * 60 * 24));
+                                                        %>
+                                                        <%= diasAtraso %> días
+                                                    </p>
+                                                </div>
+                                            <% } %>
+                                        </div>
+                                    <% } %>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Información del Lector -->
+                        <div class="col-md-6">
+                            <div class="card bg-light-custom border-0 mb-4">
+                                <div class="card-body">
+                                    <h6 class="card-subtitle mb-3 text-verde-oscuro">
+                                        <i class="bi bi-person me-2"></i>Información del Lector
+                                    </h6>
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label fw-bold">Nombre:</label>
+                                            <p class="mb-0"><%= prestamo.lector_nombre %></p>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label fw-bold">Documento:</label>
+                                            <p class="mb-0"><%= prestamo.lector_documento %></p>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label fw-bold">Email:</label>
+                                            <p class="mb-0"><%= prestamo.lector_email %></p>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label fw-bold">Teléfono:</label>
+                                            <p class="mb-0"><%= prestamo.lector_telefono || 'No registrado' %></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Información del Libro -->
+                        <div class="col-md-6">
+                            <div class="card bg-light-custom border-0 mb-4">
+                                <div class="card-body">
+                                    <h6 class="card-subtitle mb-3 text-verde-oscuro">
+                                        <i class="bi bi-journal-text me-2"></i>Información del Libro
+                                    </h6>
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label fw-bold">Título:</label>
+                                            <p class="mb-0"><%= prestamo.libro_titulo %></p>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label fw-bold">ISBN:</label>
+                                            <p class="mb-0"><%= prestamo.libro_isbn %></p>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label fw-bold">Autor:</label>
+                                            <p class="mb-0"><%= prestamo.libro_autor %></p>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label fw-bold">Editorial:</label>
+                                            <p class="mb-0"><%= prestamo.libro_editorial %></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Información Adicional -->
+                        <div class="col-md-6">
+                            <div class="card bg-light-custom border-0 mb-4">
+                                <div class="card-body">
+                                    <h6 class="card-subtitle mb-3 text-verde-oscuro">
+                                        <i class="bi bi-info-circle me-2"></i>Información Adicional
+                                    </h6>
+                                    <div class="mb-3">
+                                        <label class="form-label fw-bold">Observaciones:</label>
+                                        <p class="mb-0"><%= prestamo.observaciones || 'Sin observaciones' %></p>
+                                    </div>
+                                    <% if (prestamo.fecha_devolucion_real) { %>
+                                        <div class="row">
+                                            <div class="col-md-6 mb-3">
+                                                <label class="form-label fw-bold">Estado del Libro:</label>
+                                                <p class="mb-0">
+                                                    <% 
+                                                        const estados = {
+                                                            'bueno': 'Bueno',
+                                                            'deteriorado': 'Deteriorado',
+                                                            'perdido': 'Perdido'
+                                                        };
+                                                    %>
+                                                    <%= estados[prestamo.estado_libro] || 'No especificado' %>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    <% } %>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pie de página del recibo -->
+                    <div class="text-center mt-4">
+                        <hr class="my-3">
+                        <p class="text-muted mb-0">Este documento es un comprobante oficial de El Rincón Verde</p>
+                        <p class="text-muted mb-0">Fecha de emisión: <%= new Date().toLocaleDateString() %></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Script para exportar a PDF -->
+<script>
+function exportarPDF() {
+    const contenido = document.getElementById('contenido-pdf');
+    const opciones = {
+        margin: 1,
+        filename: 'comprobante_prestamo_<%= prestamo.id %>.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+    };
+
+    // Mostrar indicador de carga
+    const btnExportar = document.querySelector('button[onclick="exportarPDF()"]');
+    const textoOriginal = btnExportar.innerHTML;
+    btnExportar.innerHTML = '<i class="bi bi-hourglass-split me-1"></i>Generando PDF...';
+    btnExportar.disabled = true;
+
+    // Realizar la solicitud al servidor para generar el PDF
+    fetch('/admin/prestamos/prestamos/exportar-pdf/<%= prestamo.id %>')
+        .then(response => response.blob())
+        .then(blob => {
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `comprobante_prestamo_<%= prestamo.id %>.pdf`;
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            a.remove();
+        })
+        .catch(error => {
+            console.error('Error al generar el PDF:', error);
+            alert('Error al generar el PDF. Por favor, intente nuevamente.');
+        })
+        .finally(() => {
+            // Restaurar el botón
+            btnExportar.innerHTML = textoOriginal;
+            btnExportar.disabled = false;
+        });
+}
+</script> 

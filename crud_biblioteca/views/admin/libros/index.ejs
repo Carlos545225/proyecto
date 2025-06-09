@@ -1,0 +1,69 @@
+<!-- Contenido Principal del CRUD -->
+<div class="container-fluid dashboard-container px-4 py-4">
+
+    <!-- Nav Tabs estilo Carpeta con enlaces a la ruta centralizada -->
+    <ul class="nav nav-tabs nav-tabs-custom" id="crudTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+            <a href="/admin/libros?tab=libros" class="nav-link <%= typeof activeTab === 'undefined' || activeTab === 'libros' ? 'active' : '' %>" id="libros-tab">
+                <i class="bi bi-book-fill me-2"></i>Libros
+            </a>
+        </li>
+        <li class="nav-item" role="presentation">
+            <a href="/admin/libros?tab=autores" class="nav-link <%= typeof activeTab !== 'undefined' && activeTab === 'autores' ? 'active' : '' %>" id="autores-tab">
+                <i class="bi bi-person-badge me-2"></i>Autores
+            </a>
+        </li>
+        <li class="nav-item" role="presentation">
+            <a href="/admin/libros?tab=categorias" class="nav-link <%= typeof activeTab !== 'undefined' && activeTab === 'categorias' ? 'active' : '' %>" id="categorias-tab">
+                <i class="bi bi-tags-fill me-2"></i>Categorías
+            </a>
+        </li>
+        <li class="nav-item" role="presentation">
+            <a href="/admin/libros?tab=editoriales" class="nav-link <%= typeof activeTab !== 'undefined' && activeTab === 'editoriales' ? 'active' : '' %>" id="editoriales-tab">
+                <i class="bi bi-building-fill me-2"></i>Editoriales
+            </a>
+        </li>
+    </ul>
+
+    <!-- Contenido de los Tabs -->
+    <div class="tab-content" id="crudTabsContent">
+        <!-- Pestaña Libros -->
+        <div class="<%= typeof activeTab === 'undefined' || activeTab === 'libros' ? 'd-block' : 'd-none' %> p-3 bg-white border border-top-0 rounded-bottom shadow-sm" id="libros-tab-pane">
+            <%- include('./libros/tabla') %>
+        </div>
+
+        <!-- Pestaña Autores -->
+        <div class="<%= typeof activeTab !== 'undefined' && activeTab === 'autores' ? 'd-block' : 'd-none' %> p-3 bg-white border border-top-0 rounded-bottom shadow-sm" id="autores-tab-pane">
+            <%- include('./autores/tabla') %>
+        </div>
+
+        <!-- Pestaña Categorías -->
+        <div class="<%= typeof activeTab !== 'undefined' && activeTab === 'categorias' ? 'd-block' : 'd-none' %> p-3 bg-white border border-top-0 rounded-bottom shadow-sm" id="categorias-tab-pane">
+            <%- include('./categoria/tabla') %>
+        </div>
+
+        <!-- Pestaña Editoriales -->
+        <div class="<%= typeof activeTab !== 'undefined' && activeTab === 'editoriales' ? 'd-block' : 'd-none' %> p-3 bg-white border border-top-0 rounded-bottom shadow-sm" id="editoriales-tab-pane">
+            <%- include('./editorial/tabla') %>
+        </div>
+    </div>
+</div>
+
+<!-- Mensajes de éxito y error -->
+<% if (typeof success !== 'undefined' && success) { %>
+    <div class="alert alert-success alert-dismissible fade show position-fixed top-0 end-0 m-3" role="alert">
+        <%= success %>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+<% } %>
+
+<% if (typeof error !== 'undefined' && error) { %>
+    <div class="alert alert-danger alert-dismissible fade show position-fixed top-0 end-0 m-3" role="alert">
+        <%= error %>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+<% } %>
+
+<!-- Scripts específicos -->
+<script src="/js/debug-autores.js"></script>
+<script src="/js/tab-manager.js"></script>

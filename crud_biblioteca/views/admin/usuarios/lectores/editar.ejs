@@ -1,0 +1,126 @@
+<!-- Contenido Principal -->
+<div class="container-fluid dashboard-container px-4 py-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+                    <h5 class="card-title text-verde-oscuro mb-0"><i class="bi bi-pencil-square me-2"></i>Editar Lector</h5>
+                    <a href="/admin/usuarios?tab=lectores" class="btn btn-secondary">Volver</a>
+                </div>
+                <div class="card-body p-4">
+                    <form action="/admin/usuarios/lector/editar/<%= lector.id %>" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
+                        <div class="row g-3">
+                            <!-- Información Personal -->
+                            <div class="col-12">
+                                <h6 class="text-verde-oscuro mb-3">Información Personal</h6>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label for="nombre" class="form-label">Nombre *</label>
+                                <input type="text" class="form-control" id="nombre" name="nombre" value="<%= lector.nombre %>" required>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label for="apellidos" class="form-label">Apellidos *</label>
+                                <input type="text" class="form-control" id="apellidos" name="apellidos" value="<%= lector.apellidos %>" required>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="tipo_documento" class="form-label">Tipo de Documento *</label>
+                                <select class="form-select" id="tipo_documento" name="tipo_documento" required>
+                                    <option value="" disabled>Seleccione un tipo de documento</option>
+                                    <option value="CC" <%= lector.tipo_documento === 'CC' ? 'selected' : '' %>>Cédula de Ciudadanía</option>
+                                    <option value="CE" <%= lector.tipo_documento === 'CE' ? 'selected' : '' %>>Cédula de Extranjería</option>
+                                    <option value="TI" <%= lector.tipo_documento === 'TI' ? 'selected' : '' %>>Tarjeta de Identidad</option>
+                                    <option value="PP" <%= lector.tipo_documento === 'PP' ? 'selected' : '' %>>Pasaporte</option>
+                                    <option value="PE" <%= lector.tipo_documento === 'PE' ? 'selected' : '' %>>Permiso Especial de Permanencia</option>
+                                </select>
+                                <div class="invalid-feedback">Por favor seleccione un tipo de documento</div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="numero_documento" class="form-label">Número de Documento *</label>
+                                <input type="text" class="form-control" id="numero_documento" name="numero_documento" value="<%= lector.numero_documento %>" required>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="fecha_nacimiento" class="form-label">Fecha de Nacimiento</label>
+                                <input type="date" class="form-control" id="fecha_nacimiento" name="fecha_nacimiento" value="<%= lector.fecha_nacimiento %>">
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="telefono" class="form-label">Teléfono</label>
+                                <input type="tel" class="form-control" id="telefono" name="telefono" value="<%= lector.telefono || '' %>">
+                            </div>
+
+                            <!-- Información de Contacto -->
+                            <div class="col-12 mt-4">
+                                <h6 class="text-verde-oscuro mb-3">Información de Contacto</h6>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="email" class="form-label">Email *</label>
+                                <input type="email" class="form-control" id="email" name="email" value="<%= lector.email %>" required>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="password" class="form-label">Contraseña *</label>
+                                <input type="password" class="form-control" id="password" name="password" required>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="confirm_password" class="form-label">Confirmar Contraseña *</label>
+                                <input type="password" class="form-control" id="confirm_password" name="confirm_password" required>
+                            </div>
+
+                            <div class="col-12">
+                                <label for="direccion" class="form-label">Dirección</label>
+                                <textarea class="form-control" id="direccion" name="direccion" rows="2"><%= lector.direccion || '' %></textarea>
+                            </div>
+
+                            <!-- Foto de Perfil -->
+                            <div class="col-12 mt-4">
+                                <h6 class="text-verde-oscuro mb-3">Foto de Perfil</h6>
+                            </div>
+
+                            <div class="col-md-6">
+                                <% if (lector.foto_perfil && lector.foto_perfil !== 'default.png') { %>
+                                    <div class="mb-3">
+                                        <img src="/uploads/usuarios/<%= lector.foto_perfil %>" alt="Foto de perfil actual" class="img-thumbnail" style="max-width: 200px;">
+                                    </div>
+                                <% } %>
+                                <label for="foto_perfil" class="form-label">Cambiar Imagen</label>
+                                <input type="file" class="form-control" id="foto_perfil" name="foto_perfil" accept="image/*">
+                                <div class="form-text">Formatos permitidos: JPG, JPEG, PNG, GIF. Tamaño máximo: 2MB</div>
+                            </div>
+
+                            <div class="col-12 mt-4">
+                                <button type="submit" class="btn btn-verde">
+                                    <i class="bi bi-save me-2"></i>Guardar Cambios
+                                </button>
+                                <a href="/admin/usuarios?tab=lectores" class="btn btn-secondary">Cancelar</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Validación del formulario
+(function () {
+    'use strict'
+    var forms = document.querySelectorAll('.needs-validation')
+    Array.prototype.slice.call(forms).forEach(function (form) {
+        form.addEventListener('submit', function (event) {
+            if (!form.checkValidity()) {
+                event.preventDefault()
+                event.stopPropagation()
+            }
+            form.classList.add('was-validated')
+        }, false)
+    })
+})()
+</script>
