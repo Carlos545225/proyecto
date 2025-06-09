@@ -1,0 +1,49 @@
+<!-- Contenido Principal del CRUD -->
+<div class="container-fluid dashboard-container px-4 py-4">
+    <!-- Nav Tabs estilo Carpeta con enlaces a la ruta centralizada -->
+    <ul class="nav nav-tabs nav-tabs-custom" id="crudTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+            <a href="/admin/usuarios?tab=administradores" class="nav-link <%= typeof activeTab === 'undefined' || activeTab === 'administradores' ? 'active' : '' %>" id="administradores-tab">
+                <i class="bi bi-person-badge me-2"></i>Administradores
+            </a>
+        </li>
+        <li class="nav-item" role="presentation">
+            <a href="/admin/usuarios?tab=bibliotecarios" class="nav-link <%= typeof activeTab !== 'undefined' && activeTab === 'bibliotecarios' ? 'active' : '' %>" id="bibliotecarios-tab">
+                <i class="bi bi-person-workspace me-2"></i>Bibliotecarios
+            </a>
+        </li>
+        <li class="nav-item" role="presentation">
+            <a href="/admin/usuarios?tab=lectores" class="nav-link <%= typeof activeTab !== 'undefined' && activeTab === 'lectores' ? 'active' : '' %>" id="lectores-tab">
+                <i class="bi bi-person me-2"></i>Lectores
+            </a>
+        </li>
+    </ul>
+    <!-- Contenido de los Tabs -->
+    <div class="tab-content" id="crudTabsContent">
+        <!-- Tab de Administradores -->
+        <div class="tab-pane fade <%= typeof activeTab === 'undefined' || activeTab === 'administradores' ? 'show active' : '' %>" 
+             id="administradores" 
+             role="tabpanel" 
+             aria-labelledby="administradores-tab">
+            <%- include('./administrador/tabla') %>
+        </div>
+
+        <!-- Tab de Bibliotecarios -->
+        <div class="tab-pane fade <%= typeof activeTab !== 'undefined' && activeTab === 'bibliotecarios' ? 'show active' : '' %>" 
+             id="bibliotecarios" 
+             role="tabpanel" 
+             aria-labelledby="bibliotecarios-tab">
+            <%- include('./bibliotecarios/tabla') %>
+        </div>
+
+        <!-- Tab de Lectores -->
+        <div class="tab-pane fade <%= typeof activeTab !== 'undefined' && activeTab === 'lectores' ? 'show active' : '' %>" 
+             id="lectores" 
+             role="tabpanel" 
+             aria-labelledby="lectores-tab">
+            <%- include('./lectores/tabla') %>
+        </div>
+    </div>
+</div>
+
+<script src="/js/tab-manager.js"></script>

@@ -1,0 +1,142 @@
+<!-- Contenido Principal -->
+<div class="container-fluid dashboard-container px-4 py-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+                    <h5 class="card-title text-verde-oscuro mb-0"><i class="bi bi-person-circle me-2"></i>Detalles del Bibliotecario</h5>
+                    <div>
+                        <a href="/admin/usuarios/bibliotecario/editar/<%= bibliotecario.id %>" class="btn btn-verde me-2">
+                            <i class="bi bi-pencil-square me-2"></i>Editar
+                        </a>
+                        <a href="/admin/usuarios?tab=bibliotecarios" class="btn btn-secondary">
+                            <i class="bi bi-arrow-left me-2"></i>Volver
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body p-4">
+                    <div class="row">
+                        <!-- Foto de Perfil -->
+                        <div class="col-md-4 text-center mb-4">
+                            <div class="profile-image-container mb-3">
+                                <img src="/uploads/usuarios/<%= bibliotecario.foto_perfil || 'default.png' %>" 
+                                     alt="Foto de perfil" 
+                                     class="img-fluid rounded-circle"
+                                     style="width: 200px; height: 200px; object-fit: cover;">
+                            </div>
+                            <h4 class="text-verde-oscuro"><%= bibliotecario.nombre %> <%= bibliotecario.apellidos %></h4>
+                            <span class="badge bg-<%= bibliotecario.estado ? 'success' : 'danger' %>">
+                                <%= bibliotecario.estado ? 'Activo' : 'Inactivo' %>
+                            </span>
+                        </div>
+
+                        <!-- Información Personal -->
+                        <div class="col-md-8">
+                            <div class="row">
+                                <div class="col-12 mb-4">
+                                    <h6 class="text-verde-oscuro border-bottom pb-2">Información Personal</h6>
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label fw-bold">Nombre:</label>
+                                    <p><%= bibliotecario.nombre %></p>
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label fw-bold">Apellidos:</label>
+                                    <p><%= bibliotecario.apellidos %></p>
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label fw-bold">Tipo de Documento:</label>
+                                    <p><%= bibliotecario.tipo_documento %></p>
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label fw-bold">Número de Documento:</label>
+                                    <p><%= bibliotecario.numero_documento %></p>
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label fw-bold">Fecha de Nacimiento:</label>
+                                    <p><%= bibliotecario.fecha_nacimiento ? new Date(bibliotecario.fecha_nacimiento).toLocaleDateString() : 'No especificada' %></p>
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label fw-bold">Teléfono:</label>
+                                    <p><%= bibliotecario.telefono || 'No especificado' %></p>
+                                </div>
+
+                                <div class="col-12 mb-4">
+                                    <h6 class="text-verde-oscuro border-bottom pb-2">Información de Contacto</h6>
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label fw-bold">Email:</label>
+                                    <p><%= bibliotecario.email %></p>
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label fw-bold">Dirección:</label>
+                                    <p><%= bibliotecario.direccion || 'No especificada' %></p>
+                                </div>
+
+                                <div class="col-12 mb-4">
+                                    <h6 class="text-verde-oscuro border-bottom pb-2">Información Laboral</h6>
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label fw-bold">Turno:</label>
+                                    <p><%= bibliotecario.turno || 'No especificado' %></p>
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label fw-bold">Fecha de Contratación:</label>
+                                    <p><%= bibliotecario.fecha_contratacion ? new Date(bibliotecario.fecha_contratacion).toLocaleDateString() : 'No especificada' %></p>
+                                </div>
+
+                                <div class="col-12 mb-4">
+                                    <h6 class="text-verde-oscuro border-bottom pb-2">Información de Cuenta</h6>
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label fw-bold">Fecha de Registro:</label>
+                                    <p><%= new Date(bibliotecario.fecha_registro).toLocaleDateString() %></p>
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label fw-bold">Estado:</label>
+                                    <p>
+                                        <span class="badge bg-<%= bibliotecario.estado ? 'success' : 'danger' %>">
+                                            <%= bibliotecario.estado ? 'Activo' : 'Inactivo' %>
+                                        </span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Estilos adicionales para la vista de detalles */
+    .detail-item {
+        margin-bottom: 0.5rem;
+    }
+    .detail-label {
+        font-weight: 600;
+        color: var(--verde-oscuro);
+        margin-right: 0.5rem;
+    }
+    .detail-value {
+        color: var(--verde-oscuro);
+    }
+    .profile-image-container {
+        background-color: var(--verde-claro);
+        padding: 1rem;
+        border-radius: 0.5rem;
+    }
+</style>

@@ -1,0 +1,256 @@
+<!-- Contenido Principal de Mi Cuenta -->
+<div class="container-fluid dashboard-container px-4 py-4">
+    <!-- Encabezado de Mi Cuenta -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="mb-0 text-verde-oscuro"><i class="bi bi-person-circle me-2"></i>Mi Cuenta</h2>
+            <p class="text-muted mb-0">Gestiona tu información personal</p>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <!-- Columna de información personal -->
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-body text-center">
+                    <!-- Foto de perfil -->
+                    <div class="mb-4 position-relative">
+                        <img src="/imagenes/perfil/perfil.png" class="rounded-circle" width="150" height="150" alt="Foto de perfil">
+                        <form id="foto-form" action="/admin/perfil/actualizar-foto" method="POST" enctype="multipart/form-data">
+                            <label for="foto_perfil" class="btn btn-sm btn-verde-medio position-absolute bottom-0 end-0 me-3 text-white">
+                                <i class="bi bi-camera-fill text-white"></i>
+                            </label>
+                            <input type="file" class="d-none" id="foto_perfil" name="foto_perfil" accept="image/*" onchange="this.form.submit()">
+                        </form>
+                    </div>
+
+                    <h5 class="mb-1">Admin Principal</h5>
+                    <p class="text-muted mb-3">Administrador</p>
+                    <span class="badge bg-verde-oscuro mb-4 text-white">Activo</span>
+
+                    <div class="border-top pt-4">
+                        <div class="row text-start">
+                            <div class="col-12 mb-3">
+                                <label class="text-muted small d-block">Correo electrónico</label>
+                                <span>admin@biblioteca.com</span>
+                            </div>
+                            <div class="col-12 mb-3">
+                                <label class="text-muted small d-block">Tipo de Documento</label>
+                                <span>CC</span>
+                            </div>
+                            <div class="col-12 mb-3">
+                                <label class="text-muted small d-block">Número de Documento</label>
+                                <span>1234567890</span>
+                            </div>
+                            <div class="col-12 mb-3">
+                                <label class="text-muted small d-block">Teléfono</label>
+                                <span>3001234567</span>
+                            </div>
+                            <div class="col-12">
+                                <label class="text-muted small d-block">Fecha de registro</label>
+                                <span>01/03/2024</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Columna de formularios -->
+        <div class="col-lg-8">
+            <!-- Formulario de Información Personal -->
+            <div class="card mb-4">
+                <div class="card-header bg-white">
+                    <h5 class="mb-0 text-verde-oscuro">
+                        <i class="bi bi-pencil-square me-2"></i>
+                        Editar Información Personal
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <form action="/admin/perfil/actualizar" method="POST">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Nombre</label>
+                                <input type="text" class="form-control" name="nombre" value="Admin" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Apellidos</label>
+                                <input type="text" class="form-control" name="apellidos" value="Principal" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Tipo de Documento</label>
+                                <select class="form-select" name="tipo_documento" required>
+                                    <option value="CC" selected>Cédula de Ciudadanía</option>
+                                    <option value="CE">Cédula de Extranjería</option>
+                                    <option value="TI">Tarjeta de Identidad</option>
+                                    <option value="PP">Pasaporte</option>
+                                    <option value="PE">Permiso Especial de Permanencia</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Número de Documento</label>
+                                <input type="text" class="form-control" name="numero_documento" value="1234567890" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Correo Electrónico</label>
+                                <input type="email" class="form-control" name="email" value="admin@biblioteca.com" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Teléfono</label>
+                                <input type="tel" class="form-control" name="telefono" value="3001234567" 
+                                    pattern="[3][0-9]{9}" 
+                                    title="Ingrese un número de celular válido (10 dígitos comenzando con 3)"
+                                    placeholder="3001234567">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Fecha de Nacimiento</label>
+                                <input type="date" class="form-control" name="fecha_nacimiento">
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label">Dirección</label>
+                                <textarea class="form-control" name="direccion" rows="2"></textarea>
+                            </div>
+                            <div class="col-12 text-end">
+                                <button type="submit" class="btn btn-verde-medio text-white">
+                                    <i class="bi bi-save me-2 text-white"></i>Guardar Cambios
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Formulario de Cambio de Contraseña -->
+            <div class="card">
+                <div class="card-header bg-white">
+                    <h5 class="mb-0 text-verde-oscuro">
+                        <i class="bi bi-shield-lock me-2"></i>
+                        Cambiar Contraseña
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <form action="/admin/perfil/cambiar-password" method="POST">
+                        <div class="row g-3">
+                            <div class="col-12">
+                                <label class="form-label">Contraseña Actual</label>
+                                <input type="password" class="form-control" name="current_password" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Nueva Contraseña</label>
+                                <input type="password" class="form-control" name="new_password" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Confirmar Contraseña</label>
+                                <input type="password" class="form-control" name="confirm_password" required>
+                            </div>
+                            <div class="col-12">
+                                <div class="alert alert-light border">
+                                    <small class="d-block mb-2">La contraseña debe cumplir con:</small>
+                                    <ul class="small mb-0">
+                                        <li>Al menos 8 caracteres</li>
+                                        <li>Al menos una letra mayúscula</li>
+                                        <li>Al menos un número</li>
+                                        <li>Al menos un carácter especial</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="col-12 text-end">
+                                <button type="submit" class="btn btn-verde-medio text-white">
+                                    <i class="bi bi-key me-2 text-white"></i>Actualizar Contraseña
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+:root {
+    --verde-oscuro: #1a5d1a;
+    --verde-medio: #1e7b1e;
+    --verde-claro: #29a329;
+    --blanco: #ffffff;
+}
+
+.card {
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+}
+
+.card-header {
+    border-bottom: 1px solid #e0e0e0;
+    padding: 1rem;
+}
+
+.form-control {
+    border: 1px solid #e0e0e0;
+}
+
+.form-control:focus {
+    border-color: var(--verde-claro);
+    box-shadow: 0 0 0 0.2rem rgba(41, 163, 41, 0.25);
+}
+
+.text-verde-oscuro {
+    color: var(--verde-oscuro);
+}
+
+.bg-verde-oscuro {
+    background-color: var(--verde-oscuro);
+    color: var(--blanco) !important;
+}
+
+.btn-verde-medio {
+    background-color: var(--verde-medio);
+    border-color: var(--verde-medio);
+    color: var(--blanco) !important;
+}
+
+.btn-verde-medio:hover {
+    background-color: var(--verde-oscuro);
+    border-color: var(--verde-oscuro);
+    color: var(--blanco) !important;
+}
+
+.btn-verde-medio i {
+    color: var(--blanco);
+}
+
+.badge {
+    padding: 0.5em 1em;
+    color: var(--blanco) !important;
+}
+
+.form-select:focus {
+    border-color: var(--verde-claro);
+    box-shadow: 0 0 0 0.2rem rgba(41, 163, 41, 0.25);
+}
+
+/* Asegurar que los enlaces dentro de botones sean blancos */
+.btn-verde-medio a,
+a.btn-verde-medio {
+    color: var(--blanco) !important;
+    text-decoration: none;
+}
+
+/* Asegurar que los iconos dentro de botones sean blancos */
+.btn-verde-medio .bi,
+.bg-verde-oscuro .bi {
+    color: var(--blanco);
+}
+
+/* Hover states para enlaces */
+.btn-verde-medio:hover a,
+a.btn-verde-medio:hover {
+    color: var(--blanco) !important;
+}
+</style>
+
+<script>
+document.getElementById('foto_perfil').onchange = function() {
+    document.getElementById('foto-form').submit();
+};
+</script>

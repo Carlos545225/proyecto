@@ -1,0 +1,130 @@
+<!-- Tabla de Editoriales -->
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h3 class="text-verde-oscuro mb-0">Gestión de Editoriales</h3>
+    <div>
+        <a href="/admin/libros/editorial/agregar" class="btn btn-leaf"><i class="bi bi-building-fill-add me-2"></i>Añadir Nueva Editorial</a>
+        <a href="/admin/libros/editorial/historial" class="btn btn-outline-secondary ms-2"><i class="bi bi-clock-history me-2"></i>Historial</a>
+    </div>
+</div>
+
+<!-- Buscador personalizado para Editoriales -->
+<div class="card mb-3 border-0 shadow-sm bg-light-custom">
+    <div class="card-body p-3">
+        <form action="/admin/libros" method="GET" class="row g-2">
+            <input type="hidden" name="tab" value="editoriales">
+            <div class="col-md-12">
+                <div class="input-group search-custom">
+                    <span class="input-group-text bg-white border-end-0"><i class="bi bi-search text-verde-medio"></i></span>
+                    <input type="text" 
+                           name="busqueda" 
+                           class="form-control border-start-0 ps-0" 
+                           placeholder="Buscar por nombre, código, país..."
+                           value="<%= typeof filtros !== 'undefined' ? filtros.busqueda || '' : '' %>">
+                    <button class="btn btn-verde-medio text-white" type="submit">Buscar</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="table-responsive table-container-custom">
+    <table class="table table-custom">
+        <thead>
+            <tr>
+                <th class="th-custom col-id">ID</th>
+                <th class="th-custom">Nombre</th>
+                <th class="th-custom">Código</th>
+                <th class="th-custom">País</th>
+                <th class="th-custom">Año Fundación</th>
+                <th class="th-custom">Email</th>
+                <th class="th-custom">Sitio Web</th>
+                <th class="th-custom text-center col-acciones">Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% if (typeof editoriales !== 'undefined' && editoriales.length > 0) { %>
+                <% editoriales.forEach(editorial => { %>
+                    <tr>
+                        <td><%= editorial.id %></td>
+                        <td class="text-truncate-tooltip" data-title="<%= editorial.nombre %>">
+                            <%= editorial.nombre %>
+                        </td>
+                        <td><%= editorial.codigo %></td>
+                        <td><%= editorial.pais %></td>
+                        <td><%= editorial.anio_fundacion || 'N/A' %></td>
+                        <td class="text-truncate-tooltip" data-title="<%= editorial.email_contacto || 'N/A' %>">
+                            <%= editorial.email_contacto || 'N/A' %>
+                        </td>
+                        <td class="text-truncate-tooltip" data-title="<%= editorial.sitio_web || 'N/A' %>">
+                            <%= editorial.sitio_web || 'N/A' %>
+                        </td>
+                        <td class="text-center">
+                            <a href="/admin/libros/editorial/editar/<%= editorial.id %>" 
+                               class="btn-action btn-edit" 
+                               title="Editar">
+                                <i class="bi bi-pencil-square"></i>
+                            </a>
+                            <a href="/admin/libros/editorial/eliminar/<%= editorial.id %>" 
+                               class="btn-action btn-delete" 
+                               title="Enviar al Historial"
+                               onclick="return confirm('¿Está seguro de que desea enviar esta editorial al historial?')">
+                                <i class="bi bi-trash3-fill"></i>
+                            </a>
+                        </td>
+                    </tr>
+                <% }); %>
+            <% } else { %>
+                <tr>
+                    <td colspan="8" class="text-center py-4">
+                        <div class="alert alert-info mb-0">
+                            <i class="bi bi-info-circle me-2"></i>
+                            No se encontraron editoriales
+                            <% if (typeof filtros !== 'undefined' && filtros.busqueda) { %>
+                                que coincidan con la búsqueda
+                            <% } %>
+                        </div>
+                    </td>
+                </tr>
+            <% } %>
+        </tbody>
+    </table>
+</div>
+
+<!-- Paginación -->
+<% if (typeof paginacion !== 'undefined' && paginacion.editoriales) { %>
+    <div class="pagination-container">
+        <div class="pagination-info">
+            Mostrando <span class="fw-bold"><%= paginacion.editoriales.inicio %>-<%= paginacion.editoriales.fin %></span> 
+            de <span class="fw-bold"><%= paginacion.editoriales.total %></span> editoriales
+        </div>
+        <% if (paginacion.editoriales.totalPaginas > 1) { %>
+            <nav aria-label="Paginación de editoriales">
+                <ul class="pagination pagination-custom">
+                    <li class="page-item <%= paginacion.editoriales.pagina === 1 ? 'disabled' : '' %>">
+                        <a class="page-link" 
+                           href="?tab=editoriales&page=<%= paginacion.editoriales.pagina - 1 %><%= typeof filtros !== 'undefined' ? (filtros.busqueda ? '&busqueda=' + filtros.busqueda : '') : '' %>" 
+                           aria-label="Anterior">
+                            <span aria-hidden="true"><i class="bi bi-chevron-left"></i></span>
+                        </a>
+                    </li>
+                    <% for(let i = 1; i <= paginacion.editoriales.totalPaginas; i++) { %>
+                        <li class="page-item <%= i === paginacion.editoriales.pagina ? 'active' : '' %>">
+                            <a class="page-link" 
+                               href="?tab=editoriales&page=<%= i %><%= typeof filtros !== 'undefined' ? (filtros.busqueda ? '&busqueda=' + filtros.busqueda : '') : '' %>">
+                                <%= i %>
+                            </a>
+                        </li>
+                    <% } %>
+                    <li class="page-item <%= paginacion.editoriales.pagina === paginacion.editoriales.totalPaginas ? 'disabled' : '' %>">
+                        <a class="page-link" 
+                           href="?tab=editoriales&page=<%= paginacion.editoriales.pagina + 1 %><%= typeof filtros !== 'undefined' ? (filtros.busqueda ? '&busqueda=' + filtros.busqueda : '') : '' %>" 
+                           aria-label="Siguiente">
+                            <span aria-hidden="true"><i class="bi bi-chevron-right"></i></span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        <% } %>
+    </div>
+<% } %>
+

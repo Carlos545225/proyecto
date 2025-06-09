@@ -1,0 +1,113 @@
+<!-- Contenido Principal -->
+<div class="container-fluid dashboard-container px-4 py-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+                    <h5 class="card-title text-verde-oscuro mb-0"><i class="bi bi-book me-2"></i>Editar Préstamo</h5>
+                    <a href="/admin/prestamos" class="btn btn-secondary">Volver</a>
+                </div>
+                <div class="card-body p-4">
+                    <% if (error) { %>
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <%= error %>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    <% } %>
+                    <% if (success) { %>
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <%= success %>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    <% } %>
+
+                    <form action="/admin/prestamos/prestamos/editar/<%= prestamo.id %>" method="POST" class="needs-validation" novalidate>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="lector_id" class="form-label">Lector<span class="text-danger">*</span></label>
+                                <select class="form-select" id="lector_id" name="lector_id" required>
+                                    <option value="" disabled>Seleccione un lector</option>
+                                    <% if (typeof lectores !== 'undefined' && lectores.length > 0) { %>
+                                        <% lectores.forEach(lector => { %>
+                                            <option value="<%= lector.id %>" <%= prestamo.lector_id == lector.id ? 'selected' : '' %>>
+                                                <%= lector.nombre %> <%= lector.apellidos %> - <%= lector.numero_documento %>
+                                            </option>
+                                        <% }); %>
+                                    <% } %>
+                                </select>
+                                <div class="invalid-feedback">Por favor seleccione un lector</div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="libro_id" class="form-label">Libro<span class="text-danger">*</span></label>
+                                <select class="form-select" id="libro_id" name="libro_id" required>
+                                    <option value="" disabled>Seleccione un libro</option>
+                                    <% if (typeof libros !== 'undefined' && libros.length > 0) { %>
+                                        <% libros.forEach(libro => { %>
+                                            <option value="<%= libro.id %>" <%= prestamo.libro_id == libro.id ? 'selected' : '' %>>
+                                                <%= libro.titulo %> - <%= libro.autor %> (<%= libro.editorial %>)
+                                            </option>
+                                        <% }); %>
+                                    <% } %>
+                                </select>
+                                <div class="invalid-feedback">Por favor seleccione un libro</div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="fecha_prestamo" class="form-label">Fecha de Préstamo<span class="text-danger">*</span></label>
+                                <input type="date" class="form-control" id="fecha_prestamo" name="fecha_prestamo" 
+                                       value="<%= prestamo.fecha_prestamo %>" required>
+                                <div class="invalid-feedback">Por favor seleccione la fecha de préstamo</div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="fecha_devolucion_esperada" class="form-label">Fecha de Devolución Esperada<span class="text-danger">*</span></label>
+                                <input type="date" class="form-control" id="fecha_devolucion_esperada" 
+                                       name="fecha_devolucion_esperada" value="<%= prestamo.fecha_devolucion_esperada %>" required>
+                                <div class="invalid-feedback">Por favor seleccione la fecha de devolución esperada</div>
+                            </div>
+                            <div class="col-12">
+                                <label for="observaciones" class="form-label">Observaciones</label>
+                                <textarea class="form-control" id="observaciones" name="observaciones" rows="3"><%= prestamo.observaciones || '' %></textarea>
+                            </div>
+                            <div class="col-12 mt-4">
+                                <button type="submit" class="btn btn-leaf"><i class="bi bi-save me-2"></i>Guardar Cambios</button>
+                                <a href="/admin/prestamos" class="btn btn-outline-secondary ms-2"><i class="bi bi-x-circle me-2"></i>Cancelar</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Establecer la fecha mínima como hoy
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('fecha_prestamo').min = today;
+    document.getElementById('fecha_devolucion_esperada').min = today;
+
+    // Establecer la fecha de devolución esperada como 15 días después
+    const fechaPrestamo = document.getElementById('fecha_prestamo');
+    const fechaDevolucion = document.getElementById('fecha_devolucion_esperada');
+
+    fechaPrestamo.addEventListener('change', function() {
+        const fecha = new Date(this.value);
+        fecha.setDate(fecha.getDate() + 15);
+        fechaDevolucion.min = fecha.toISOString().split('T')[0];
+        fechaDevolucion.value = fecha.toISOString().split('T')[0];
+    });
+
+    // Validación del formulario
+    (function() {
+        'use strict';
+        var forms = document.querySelectorAll('.needs-validation');
+        Array.prototype.slice.call(forms).forEach(function(form) {
+            form.addEventListener('submit', function(event) {
+                if (!form.checkValidity()) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                form.classList.add('was-validated');
+            }, false);
+        });
+    })();
+</script>

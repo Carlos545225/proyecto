@@ -1,0 +1,141 @@
+<!-- Contenido Principal -->
+<div class="container-fluid dashboard-container px-4 py-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+                    <h5 class="card-title text-verde-oscuro mb-0"><i class="bi bi-clock-history me-2"></i>Historial de Lectores</h5>
+                    <a href="/admin/usuarios?tab=lectores" class="btn btn-secondary">Volver</a>
+                </div>
+                <div class="card-body p-4">
+                    <!-- Formulario de búsqueda -->
+                    <form action="/admin/usuarios/lector/historial" method="GET" class="mb-4">
+                        <div class="row g-3">
+                            <div class="col-md-8">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" name="busqueda" placeholder="Buscar por nombre, apellidos, email o documento..." value="<%= busqueda %>">
+                                    <button class="btn btn-verde" type="submit">
+                                        <i class="bi bi-search me-1"></i>Buscar
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="col-md-4 text-md-end">
+                                <a href="/admin/usuarios/lector/historial" class="btn btn-outline-verde">
+                                    <i class="bi bi-x-circle me-1"></i>Limpiar filtros
+                                </a>
+                            </div>
+                        </div>
+                    </form>
+
+                    <!-- Tabla de lectores -->
+                    <div class="table-responsive table-container-custom">
+                        <table class="table table-custom">
+                            <thead>
+                                <tr>
+                                    <th class="th-custom">ID</th>
+                                    <th class="th-custom">Nombre</th>
+                                    <th class="th-custom">Apellidos</th>
+                                    <th class="th-custom">Email</th>
+                                    <th class="th-custom">Documento</th>
+                                    <th class="th-custom">Teléfono</th>
+                                    <th class="th-custom">Estado</th>
+                                    <th class="th-custom text-center">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% if (lectores && lectores.length > 0) { %>
+                                    <% lectores.forEach(lector => { %>
+                                        <tr>
+                                            <td><%= lector.id %></td>
+                                            <td><%= lector.nombre %></td>
+                                            <td><%= lector.apellidos %></td>
+                                            <td><%= lector.email %></td>
+                                            <td><%= lector.tipo_documento %> <%= lector.numero_documento %></td>
+                                            <td><%= lector.telefono || 'No especificado' %></td>
+                                            <td>
+                                                <span class="badge badge-custom <%= lector.estado ? 'badge-success' : 'badge-danger' %>">
+                                                    <%= lector.estado ? 'Activo' : 'Inactivo' %>
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <a href="/admin/usuarios/lector/restaurar/<%= lector.id %>" class="btn-action btn-success" title="Restaurar">
+                                                    <i class="bi bi-arrow-counterclockwise"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    <% }); %>
+                                <% } else { %>
+                                    <tr>
+                                        <td colspan="8" class="text-center">No hay lectores en el historial.</td>
+                                    </tr>
+                                <% } %>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Paginación -->
+                    <% if (typeof paginacion !== 'undefined') { %>
+                        <div class="pagination-container">
+                            <div class="pagination-info">
+                                Mostrando <span class="fw-bold"><%= paginacion.inicio %>-<%= paginacion.fin %></span> 
+                                de <span class="fw-bold"><%= paginacion.total %></span> registros
+                            </div>
+                            <% if (paginacion.totalPaginas > 1) { %>
+                                <nav aria-label="Paginación del historial">
+                                    <ul class="pagination pagination-custom">
+                                        <li class="page-item <%= paginacion.pagina === 1 ? 'disabled' : '' %>">
+                                            <a class="page-link" 
+                                               href="?page=<%= paginacion.pagina - 1 %><%= busqueda ? '&busqueda=' + busqueda : '' %>" 
+                                               aria-label="Anterior">
+                                                <span aria-hidden="true"><i class="bi bi-chevron-left"></i></span>
+                                            </a>
+                                        </li>
+                                        <% for(let i = 1; i <= paginacion.totalPaginas; i++) { %>
+                                            <li class="page-item <%= i === paginacion.pagina ? 'active' : '' %>">
+                                                <a class="page-link" 
+                                                   href="?page=<%= i %><%= busqueda ? '&busqueda=' + busqueda : '' %>">
+                                                    <%= i %>
+                                                </a>
+                                            </li>
+                                        <% } %>
+                                        <li class="page-item <%= paginacion.pagina === paginacion.totalPaginas ? 'disabled' : '' %>">
+                                            <a class="page-link" 
+                                               href="?page=<%= paginacion.pagina + 1 %><%= busqueda ? '&busqueda=' + busqueda : '' %>" 
+                                               aria-label="Siguiente">
+                                                <span aria-hidden="true"><i class="bi bi-chevron-right"></i></span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </nav>
+                            <% } %>
+                        </div>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .pagination-container {
+        background-color: var(--verde-claro);
+        padding: 1rem;
+        border-radius: 0.5rem;
+    }
+    .pagination .page-link {
+        color: var(--verde-oscuro);
+        border-color: var(--verde-medio);
+    }
+    .pagination .page-item.active .page-link {
+        background-color: var(--verde-oscuro);
+        border-color: var(--verde-oscuro);
+    }
+    .pagination .page-link:hover {
+        color: var(--verde-medio);
+        background-color: var(--verde-claro);
+    }
+    .pagination .page-item.disabled .page-link {
+        color: #6c757d;
+        background-color: #fff;
+    }
+</style>
