@@ -1,0 +1,38 @@
+.btn-action {
+    width: 35px;
+    height: 35px;
+    padding: 0;
+    border-radius: 6px !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.btn-action i {
+    font-size: 0.875rem;
+}
+
+.btn-action:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+}
+
+.d-flex.gap-2 {
+    gap: 8px !important;
+} 
+
+
+#diagnostico-sugerencias {
+    margin-top: 2px;
+}
+#diagnostico-sugerencias .list-group-item {
+    cursor: pointer;
+    padding: 0.2rem 0.2rem;
+    border: none;
+    border-bottom: 0.5px solid #dee2e6;
+}
+
+#diagnostico-sugerencias .list-group-item:hover {
+    background-color: #f8f9fa;
+}

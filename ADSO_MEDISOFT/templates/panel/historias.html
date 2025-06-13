@@ -1,0 +1,440 @@
+{% extends 'panel/base_panel.html' %}
+{% block content %}
+<main class="container-fluid mt-4 flex-grow-1">
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-4">
+        <h1 class="h3 fw-bold text-secondary">Gestión de Historias Clínicas</h1>
+        <div class="btn-toolbar mb-2 mb-md-0">
+            <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#nuevaHistoriaModal">
+                <i class="fas fa-notes-medical me-1"></i> Nueva Historia
+            </button>
+            <a href="{{ url_for('exportar_historias_pdf', busqueda=request.args.get('busqueda', ''), medico_id=request.args.get('medico_id', ''), fecha=request.args.get('fecha', '')) }}" class="btn btn-sm btn-outline-secondary ms-2">
+                <i class="fas fa-file-pdf me-1"></i> Exportar PDF
+            </a>
+            <a href="{{ url_for('exportar_historias_excel', busqueda=request.args.get('busqueda', ''), medico_id=request.args.get('medico_id', ''), fecha=request.args.get('fecha', '')) }}" class="btn btn-sm btn-outline-secondary ms-2">
+                <i class="fas fa-file-excel me-1"></i> Exportar Excel
+            </a>
+        </div>
+    </div>
+
+    <!-- Filtros de búsqueda -->
+    <div class="card shadow-sm border-0 mb-4">
+        <div class="card-body">
+            <form action="{{ url_for('historia') }}" method="GET">
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <div class="input-group">
+                            <span class="input-group-text bg-light"><i class="fas fa-search"></i></span>
+                            <input type="text" class="form-control" name="busqueda" value="{{ busqueda }}" placeholder="Buscar paciente o médico...">
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <select class="form-select" name="medico_id">
+                            <option value="" {% if not medico_id %}selected{% endif %}>Todos los médicos</option>
+                            {% for m in medicos %}
+                            <option value="{{ m.id }}" {% if medico_id|int == m.id %}selected{% endif %}>Dr. {{ m.nombre }} {{ m.apellido }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <input type="date" class="form-control" name="fecha" value="{{ fecha }}" placeholder="Filtrar por fecha">
+                    </div>
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btn-primary w-100"><i class="fas fa-filter me-1"></i>Filtrar</button>
+                    </div>
+                    <div class="col-md-2">
+                        <a href="{{ url_for('historia') }}" class="btn btn-outline-secondary w-100"><i class="fas fa-undo me-1"></i>Limpiar</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Tabla de historias clínicas -->
+    <div class="card shadow-sm border-0">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th scope="col">#HC</th>
+                            <th scope="col">Paciente</th>
+                            <th scope="col">Documento</th>
+                            <th scope="col">Fecha Creación</th>
+                            <th scope="col">Última Consulta</th>
+                            <th scope="col">Médico Tratante</th>
+                            <th scope="col">Diagnóstico</th>
+                            <th scope="col">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if historias.items %}
+                            {% for historia in historias.items %}
+                            <tr>
+                                <td>HC{{ "%03d"|format(historia.id) }}</td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <img src="{{ url_for('static', filename='img/panel/perfil.png')}}" class="rounded-circle me-2" width="40" height="40" alt="Foto">
+                                        <div>
+                                            <div class="fw-medium">{{ historia.cita.paciente.nombre }}</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>{{ historia.cita.paciente.numero_documento }}</td>
+                                <td>{{ historia.fecha.strftime('%d/%m/%Y') }}</td>
+                                <td>{{ historia.fecha.strftime('%d/%m/%Y') }}</td>
+                                <td>Dr. {{ historia.cita.medico.nombre }} {{ historia.cita.medico.apellido }}</td>
+                                <td>{{ historia.diagnostico.descripcion }}</td>
+                                <td>
+                                    <div class="d-flex gap-2">
+                                        <button type="button" class="btn btn-primary btn-action" title="Ver detalles" data-bs-toggle="modal" data-bs-target="#verHistoriaModal{{ historia.id }}">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-success btn-action text-white" title="Editar" data-bs-toggle="modal" data-bs-target="#editarHistoriaModal{{ historia.id }}">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <a href="{{ url_for('exportar_historia_pdf', id=historia.id) }}" class="btn btn-dark btn-action text-white" title="Exportar a PDF">
+                                            <i class="fas fa-file-pdf"></i>
+                                        </a>
+                                        <form action="{{ url_for('eliminar_historia', id=historia.id) }}" method="POST" class="d-inline">
+                                            <button type="submit" class="btn btn-danger btn-action" title="Eliminar">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="9" class="text-center py-4">No hay historias clínicas registradas</td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Paginación -->
+            {% if historias.pages > 1 %}
+            <nav aria-label="Paginación de historias clínicas">
+                <ul class="pagination justify-content-center mt-4">
+                    <li class="page-item {% if not historias.has_prev %}disabled{% endif %}">
+                        <a class="page-link" href="{{ url_for('historia', page=historias.prev_num, busqueda=busqueda, medico_id=medico_id, fecha=fecha) if historias.has_prev else '#' }}" tabindex="{% if not historias.has_prev %}-1{% endif %}" aria-disabled="{% if not historias.has_prev %}true{% else %}false{% endif %}">Anterior</a>
+                    </li>
+                    
+                    {% for page_num in historias.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+                        {% if page_num %}
+                            <li class="page-item {% if page_num == historias.page %}active{% endif %}">
+                                <a class="page-link" href="{{ url_for('historia', page=page_num, busqueda=busqueda, medico_id=medico_id, fecha=fecha) }}">{{ page_num }}</a>
+                            </li>
+                        {% else %}
+                            <li class="page-item disabled"><span class="page-link">...</span></li>
+                        {% endif %}
+                    {% endfor %}
+                    
+                    <li class="page-item {% if not historias.has_next %}disabled{% endif %}">
+                        <a class="page-link" href="{{ url_for('historia', page=historias.next_num, busqueda=busqueda, medico_id=medico_id, fecha=fecha) if historias.has_next else '#' }}">Siguiente</a>
+                    </li>
+                </ul>
+            </nav>
+            {% endif %}
+        </div>
+    </div>
+</main>
+
+<!-- Modal para Nueva Historia Clínica -->
+<div class="modal fade" id="nuevaHistoriaModal" tabindex="-1" aria-labelledby="nuevaHistoriaModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title" id="nuevaHistoriaModalLabel">Registrar Nueva Historia Clínica</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="nuevaHistoriaForm" action="{{ url_for('agregar_historia') }}" method="POST">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="citaHistoria" class="form-label">Cita asociada</label>
+                            <select class="form-select border border-primary rounded" id="citaHistoria" name="citaHistoria" required onchange="completarMotivo()">
+                                <option value="" selected disabled>Seleccionar cita</option>
+                                {% for c in citas %}
+                                    {% if not c.historia_clinica %}
+                                    <option value="{{ c.id }}" data-motivo="{{ c.motivo }}">{{ c.fecha.strftime('%d/%m/%Y') }} - {{ c.paciente.nombre }} {{ c.paciente.apellido }} (Dr. {{ c.medico.nombre }})</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="motivoConsulta" class="form-label">Motivo de Consulta</label>
+                            <input type="text" class="form-control border border-primary rounded" id="motivoConsulta" name="motivoConsulta" placeholder="Ingrese el motivo de consulta" required>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-12">
+                            <label for="antecedentesMedicos" class="form-label">Antecedentes Médicos</label>
+                            <textarea class="form-control border border-primary rounded" id="antecedentesMedicos" name="antecedentesMedicos" rows="3" placeholder="Ingrese los antecedentes médicos"></textarea>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-12 position-relative">
+                            <label for="diagnostico" class="form-label">Diagnóstico CIE-10</label>
+                            <input type="text" class="form-control border border-primary rounded" id="diagnostico" placeholder="Buscar por código o descripción..." required>
+                            <input type="hidden" id="diagnostico_codigo" name="diagnostico_codigo">
+                            <div id="diagnostico-sugerencias" class="list-group position-absolute w-100 shadow-sm" style="z-index: 1000; max-height: 200px; overflow-y: auto; display: none; background-color: white; border: 1px solid #dee2e6; border-radius: 0.25rem;">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-12">
+                            <label for="tratamiento" class="form-label">Tratamiento</label>
+                            <textarea class="form-control border border-primary rounded" id="tratamiento" name="tratamiento" rows="3" placeholder="Ingrese el tratamiento" required></textarea>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="submit" form="nuevaHistoriaForm" class="btn btn-primary">Guardar Historia</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% for historia in historias.items %}
+<div class="modal fade" id="verHistoriaModal{{ historia.id }}" tabindex="-1" aria-labelledby="verHistoriaModalLabel{{ historia.id }}" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title" id="verHistoriaModalLabel{{ historia.id }}">
+                    <i class="fas fa-notes-medical me-2"></i>Historia Clínica - HC{{ "%03d"|format(historia.id) }}
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <div class="row">
+                    <div class="col-md-3 text-center mb-4">
+                        <img src="{{ url_for('static', filename='img/panel/perfil.png') }}" 
+                             class="rounded-circle img-thumbnail mb-2" 
+                             style="width: 120px; height: 120px;" 
+                             alt="Foto de paciente">
+                        <h5 class="mb-0">{{ historia.cita.paciente.nombre }} {{ historia.cita.paciente.apellido }}</h5>
+                        <p class="text-muted">Paciente</p>
+                    </div>
+                    <div class="col-md-9">
+                        <div class="row g-3">
+                            <!-- Datos del paciente -->
+                            <div class="col-md-6">
+                                <div class="card h-100 border-0 shadow-sm">
+                                    <div class="card-body">
+                                        <h6 class="card-subtitle mb-2 text-muted">
+                                            <i class="fas fa-user me-2"></i>Datos del Paciente
+                                        </h6>
+                                        <ul class="list-unstyled mb-0">
+                                            <li class="mb-2">
+                                                <strong>Documento:</strong> {{ historia.cita.paciente.tipo_documento }} {{ historia.cita.paciente.numero_documento }}
+                                            </li>
+                                            <li class="mb-2">
+                                                <strong>Teléfono:</strong> 
+                                                <a href="tel:{{ historia.cita.paciente.telefono }}" class="text-decoration-none">
+                                                    <i class="fas fa-phone me-1"></i>{{ historia.cita.paciente.telefono }}
+                                                </a>
+                                            </li>
+                                            <li class="mb-2">
+                                                <strong>Correo:</strong> 
+                                                <a href="mailto:{{ historia.cita.paciente.correo }}" class="text-decoration-none">
+                                                    <i class="fas fa-envelope me-1"></i>{{ historia.cita.paciente.correo }}
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <strong>EPS:</strong> {{ historia.cita.paciente.eps }}
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Datos de la consulta -->
+                            <div class="col-md-6">
+                                <div class="card h-100 border-0 shadow-sm">
+                                    <div class="card-body">
+                                        <h6 class="card-subtitle mb-2 text-muted">
+                                            <i class="fas fa-stethoscope me-2"></i>Datos de la Consulta
+                                        </h6>
+                                        <ul class="list-unstyled mb-0">
+                                            <li class="mb-2">
+                                                <strong>Fecha:</strong> {{ historia.fecha.strftime('%d/%m/%Y') }}
+                                            </li>
+                                            <li class="mb-2">
+                                                <strong>Médico:</strong> Dr. {{ historia.cita.medico.nombre }} {{ historia.cita.medico.apellido }}
+                                            </li>
+                                            <li>
+                                                <strong>Especialidad:</strong> {{ especialidades[historia.cita.medico.especialidad] if historia.cita.medico.especialidad in especialidades else historia.cita.medico.especialidad }}
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Detalles clínicos (dividido en 2 tarjetas) -->
+                            <div class="col-md-6">
+                                <div class="card border-0 shadow-sm mb-3">
+                                    <div class="card-body">
+                                        <h6 class="card-subtitle mb-2 text-muted">
+                                            <i class="fas fa-clipboard-list me-2"></i>Motivo de Consulta
+                                        </h6>
+                                        <p class="card-text">{{ historia.motivo_consulta }}</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="card border-0 shadow-sm">
+                                    <div class="card-body">
+                                        <h6 class="card-subtitle mb-2 text-muted">
+                                            <i class="fas fa-history me-2"></i>Antecedentes
+                                        </h6>
+                                        <p class="card-text">{{ historia.antecedentes or 'No se registraron antecedentes' }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <div class="card border-0 shadow-sm mb-3">
+                                    <div class="card-body">
+                                        <h6 class="card-subtitle mb-2 text-muted">
+                                            <i class="fas fa-heartbeat me-2"></i>Diagnóstico
+                                        </h6>
+                                        <p class="card-text">{{ historia.diagnostico.descripcion }}</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="card border-0 shadow-sm">
+                                    <div class="card-body">
+                                        <h6 class="card-subtitle mb-2 text-muted">
+                                            <i class="fas fa-prescription-bottle-alt me-2"></i>Tratamiento
+                                        </h6>
+                                        <p class="card-text">{{ historia.tratamiento }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#editarHistoriaModal{{ historia.id }}" data-bs-dismiss="modal">
+                    <i class="fas fa-edit me-1"></i>Editar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+    
+<!-- Modal Editar Historia Clínica {{ historia.id }} -->
+<div class="modal fade" id="editarHistoriaModal{{ historia.id }}" tabindex="-1" aria-labelledby="editarHistoriaModalLabel{{ historia.id }}" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title" id="editarHistoriaModalLabel{{ historia.id }}">Editar Historia Clínica</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editarHistoriaForm{{ historia.id }}" action="{{ url_for('editar_historia', id=historia.id) }}" method="POST">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="editPacienteHistoria{{ historia.id }}" class="form-label">Paciente</label>
+                            <input type="text" class="form-control border border-primary rounded" id="editPacienteHistoria{{ historia.id }}" value="{{ historia.cita.paciente.nombre }} {{ historia.cita.paciente.apellido }}" readonly>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="editMedicoHistoria{{ historia.id }}" class="form-label">Médico Tratante</label>
+                            <input type="text" class="form-control border border-primary rounded" id="editMedicoHistoria{{ historia.id }}" value="Dr. {{ historia.cita.medico.nombre }} {{ historia.cita.medico.apellido }}" readonly>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="editFechaCreacion{{ historia.id }}" class="form-label">Fecha de Creación</label>
+                            <input type="date" class="form-control border border-primary rounded" id="editFechaCreacion{{ historia.id }}" value="{{ historia.fecha.strftime('%Y-%m-%d') }}" readonly>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="editMotivoConsulta{{ historia.id }}" class="form-label">Motivo de Consulta</label>
+                            <input type="text" class="form-control border border-primary rounded" id="editMotivoConsulta{{ historia.id }}" name="motivoConsulta" value="{{ historia.motivo_consulta }}" placeholder="Ingrese el motivo de consulta" required>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-12">
+                            <label for="editAntecedentesMedicos{{ historia.id }}" class="form-label">Antecedentes Médicos</label>
+                            <textarea class="form-control border border-primary rounded" id="editAntecedentesMedicos{{ historia.id }}" name="antecedentesMedicos" rows="3" placeholder="Ingrese los antecedentes médicos">{{ historia.antecedentes }}</textarea>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-12 position-relative">
+                            <label for="editDiagnostico{{ historia.id }}" class="form-label">Diagnóstico CIE-10</label>
+                            <input type="text" class="form-control border border-primary rounded" id="editDiagnostico{{ historia.id }}" placeholder="Buscar por código o descripción..." required value="{{ historia.diagnostico.descripcion }}">
+                            <input type="hidden" id="editDiagnosticoCodigo{{ historia.id }}" name="diagnostico_codigo" value="{{ historia.diagnostico_codigo }}">
+                            <div id="edit-diagnostico-sugerencias{{ historia.id }}" class="list-group position-absolute w-100 shadow-sm" style="z-index: 1000; max-height: 200px; overflow-y: auto; display: none; background-color: white; border: 1px solid #dee2e6; border-radius: 0.25rem;"></div>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-12">
+                            <label for="editTratamientoActual{{ historia.id }}" class="form-label">Tratamiento</label>
+                            <textarea class="form-control border border-primary rounded" id="editTratamientoActual{{ historia.id }}" name="tratamiento" rows="3" placeholder="Ingrese el tratamiento" required>{{ historia.tratamiento }}</textarea>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="submit" form="editarHistoriaForm{{ historia.id }}" class="btn btn-primary">Guardar cambios</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+{% if busqueda_diagnostico and diagnosticos %}
+<div class="card mb-3">
+    <div class="card-header">
+        <h5 class="mb-0">Resultados de búsqueda CIE-10</h5>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Código</th>
+                        <th>Descripción</th>
+                        <th>Categoría</th>
+                        <th>Subcategoría</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for diagnostico in diagnosticos %}
+                    <tr>
+                        <td>{{ diagnostico.codigo }}</td>
+                        <td>{{ diagnostico.descripcion }}</td>
+                        <td>{{ diagnostico.categoria }}</td>
+                        <td>{{ diagnostico.subcategoria }}</td>
+                        <td>
+                            <button class="btn btn-sm btn-primary" onclick="seleccionarDiagnostico('{{ diagnostico.codigo }}', '{{ diagnostico.descripcion }}')">
+                                Seleccionar
+                            </button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="{{ url_for('static', filename='js/panel/alerts.js') }}"></script>
+<script src="{{ url_for('static', filename='js/autocompletar.js') }}"></script>
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/panel/styles.css') }}">
+{% endblock %}
